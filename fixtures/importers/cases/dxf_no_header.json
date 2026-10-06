@@ -1,0 +1,5 @@
+{
+ "description": "no HEADER section: unitless, taken as mm",
+ "kind": "dxf",
+ "input": "dxf/no_header.dxf"
+}

@@ -1,0 +1,18 @@
+{
+ "description": "Unidirectional Engraving: every line in the same direction, with a fast return",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 40 80 C0 FF FF",
+   "FF C0 80 40 00 00",
+   "00 00 FF FF 00 00",
+   "80 80 80 80 80 80"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal"
+ },
+ "settings": {
+  "Unidirectional Engraving": true
+ }
+}

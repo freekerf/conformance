@@ -1,0 +1,5 @@
+{
+ "description": "ELLIPSE (full, partial, wrapped, mirrored) and SPLINE (non-rational, rational, closed, fit points only, invalid, bad weights) with the default arc fitting tolerance",
+ "kind": "dxf",
+ "input": "dxf/curves.dxf"
+}

@@ -1,0 +1,5 @@
+{
+ "description": "width but no height and no viewBox: no Y flip offset",
+ "kind": "svg",
+ "input": "svg/width_only.svg"
+}

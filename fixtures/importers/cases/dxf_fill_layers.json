@@ -1,0 +1,40 @@
+{
+ "description": "layer modes on dxf colors: fill the closed shapes (paths as polylines), cut last with 2 passes, ignore one color",
+ "kind": "dxf",
+ "input": "dxf/lines_arcs.dxf",
+ "layers": [
+  {
+   "color": "#FF0000",
+   "mode": "Cut",
+   "speed": 300,
+   "power": 1000,
+   "passes": 2
+  },
+  {
+   "color": "#000000",
+   "mode": "FillAndLine",
+   "speed": 1500,
+   "power": 600,
+   "fill": "NewDiagonal",
+   "lines_per_mm": 1
+  },
+  {
+   "color": "#336699",
+   "mode": "Fill",
+   "speed": 2000,
+   "power": 400,
+   "fill": "NewHorizontal",
+   "lines_per_mm": 2
+  },
+  {
+   "color": "#00FF00",
+   "mode": "Ignore"
+  },
+  {
+   "color": "#AA5500",
+   "mode": "Line",
+   "speed": 1000,
+   "power": 500
+  }
+ ]
+}

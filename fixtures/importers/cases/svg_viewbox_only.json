@@ -1,0 +1,5 @@
+{
+ "description": "only a viewBox (extra spaces, stray parenthesis), no width/height: user units taken as px",
+ "kind": "svg",
+ "input": "svg/viewbox_only.svg"
+}

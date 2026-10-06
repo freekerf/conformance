@@ -1,0 +1,8 @@
+{
+ "description": "Firmware Type=Smoothie: power scaled to 0..1 and repeated on G1 moves",
+ "kind": "svg",
+ "input": "svg/paths.svg",
+ "settings": {
+  "Firmware Type": "Smoothie"
+ }
+}

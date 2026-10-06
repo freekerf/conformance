@@ -1,0 +1,14 @@
+{
+ "description": "an all-white image: only travel",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "FF FF FF FF",
+   "FF FF FF FF",
+   "FF FF FF FF"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal"
+ }
+}

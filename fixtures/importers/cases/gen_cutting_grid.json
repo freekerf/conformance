@@ -1,0 +1,17 @@
+{
+ "description": "cutting test, 3 speeds x 2 pass counts, no title",
+ "kind": "generator",
+ "generator": "cutting",
+ "args": {
+  "f_col": 3,
+  "f_start": 500,
+  "f_end": 1500,
+  "p_start": 1,
+  "p_end": 2,
+  "s_fixed": 1000,
+  "f_text": 1000,
+  "s_text": 500,
+  "title": "",
+  "ton": "M3"
+ }
+}

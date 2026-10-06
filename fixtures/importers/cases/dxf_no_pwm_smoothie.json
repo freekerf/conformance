@@ -1,0 +1,10 @@
+{
+ "description": "Smoothie firmware without hardware PWM, G0 disabled: M3/M5, power scaled to 0..1, rapid moves as G1",
+ "kind": "dxf",
+ "input": "dxf/inches.dxf",
+ "settings": {
+  "Firmware Type": "Smoothie",
+  "Support Hardware PWM": false,
+  "Disable G0 fast skip": true
+ }
+}

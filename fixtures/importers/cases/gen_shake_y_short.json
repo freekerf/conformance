@@ -1,0 +1,12 @@
+{
+ "description": "shake test on Y, axis 120 mm (the 200/400 mm trips do not fit)",
+ "kind": "generator",
+ "generator": "shake",
+ "args": {
+  "axis": "Y",
+  "flimit": 3000,
+  "axislen": 120,
+  "cpower": 500,
+  "cspeed": 1000
+ }
+}

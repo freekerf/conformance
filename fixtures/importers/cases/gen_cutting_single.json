@@ -1,0 +1,17 @@
+{
+ "description": "cutting test, one column (no speed step), equal ranges, custom title, M4",
+ "kind": "generator",
+ "generator": "cutting",
+ "args": {
+  "f_col": 1,
+  "f_start": 800,
+  "f_end": 800,
+  "p_start": 2,
+  "p_end": 2,
+  "s_fixed": 700,
+  "f_text": 1200,
+  "s_text": 300,
+  "title": "Plywood 3mm",
+  "ton": "M4"
+ }
+}

@@ -1,0 +1,8 @@
+{
+ "description": "same paths with Vector.UseSmartBezier=false: curves with 12 fixed segments",
+ "kind": "svg",
+ "input": "svg/paths.svg",
+ "settings": {
+  "Vector.UseSmartBezier": false
+ }
+}

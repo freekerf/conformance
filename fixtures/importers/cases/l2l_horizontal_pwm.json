@@ -1,0 +1,17 @@
+{
+ "description": "horizontal Line2Line, PWM power from pixel darkness (min..max), 10 px/mm",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 40 80 C0 FF FF",
+   "FF C0 80 40 00 00",
+   "00 00 FF FF 00 00",
+   "80 80 80 80 80 80"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal",
+  "minPower": 0,
+  "maxPower": 1000
+ }
+}

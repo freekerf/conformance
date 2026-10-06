@@ -1,0 +1,14 @@
+{
+ "description": "near-white pixels become transparent",
+ "kind": "image_op",
+ "op": "whitenize",
+ "image": {
+  "pixels": [
+   "FFFFFF FAFAFA F0F0F0 000000 F0FFFF",
+   "FEFFFD 00FFFFFF FFF0FF 808080 FFFFF0"
+  ]
+ },
+ "args": {
+  "threshold": 10
+ }
+}

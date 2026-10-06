@@ -1,0 +1,5 @@
+{
+ "description": "color layers found: style/attributes, stroke before fill, inheritance, rgb()/%/#rgb/named, unsupported values fall back to black",
+ "kind": "svg",
+ "input": "svg/colors.svg"
+}

@@ -1,0 +1,16 @@
+{
+ "description": "resize to the same size: plain copy",
+ "kind": "image_op",
+ "op": "resize",
+ "image": {
+  "pixels": [
+   "FF0000 00FF00 0000FF FFFFFF",
+   "808080 C08040 000000 4080C0",
+   "10FF10 FF10FF 7F7F7F 202020"
+  ]
+ },
+ "args": {
+  "width": 4,
+  "height": 3
+ }
+}

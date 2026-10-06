@@ -1,0 +1,165 @@
+# Machine-readable scope for the coverage report (human version: SCOPE.md).
+#
+# tier = "core"      -> counts toward the 100% line/branch target
+# tier = "importers" -> phase 2: G-code generators and SVG/DXF/raster importers,
+#                       same target, reported separately (SCOPE.md, "Importers")
+# tier = "helper"    -> measured and reported, no target (embedded third-party or
+#                       infrastructure code the core calls into)
+#
+# A file may be listed more than once with different ranges and tiers; a line
+# belongs to the first entry (in this order) whose ranges contain it.
+# ranges           -> optional [first, last] line ranges (inclusive) of the file that
+#                     are in scope; omitted = the whole file
+#
+# Justified exclusions (unreachable or untestable lines inside the scope) are
+# listed in exclusions.toml with their reason; the report shows coverage both
+# raw and net of those exclusions.
+
+[[file]]
+path = "LaserGRBL/Core/GrblCore.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/Core/MarlinCore.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/Core/SmoothieCore.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/Core/VigoCore.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/GrblCommand.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/StateBuilder.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/Settings.cs"
+tier = "core"
+
+# GrblFile: G-code load/save/analysis/range only. The importer parts are listed
+# again below with tier "importers"; Potrace (379-506), Centerline and the GDI
+# preview drawing are not in scope yet (see SCOPE.md).
+[[file]]
+path = "LaserGRBL/GrblFile.cs"
+tier = "core"
+ranges = [[24, 174], [366, 377], [507, 518], [1321, 1353], [1470, 1498], [1684, 1850]]
+
+[[file]]
+path = "LaserGRBL/GrblEmulator/Grblv11Emulator.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/ComWrapper/Emulator.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/ComWrapper/UsbSerial.cs"
+tier = "core"
+
+[[file]]
+path = "LaserGRBL/Tools/RetainedSetting.cs"
+tier = "core"
+
+# only MathHelper.LinearDistance (RulerStepCalculator is used by the UI rulers)
+[[file]]
+path = "LaserGRBL/Tools/MathHelper.cs"
+tier = "core"
+ranges = [[14, 24]]
+
+# ------------------------------------------------------------------ importers
+# GrblFile: vector import (175-216), raster segments and filling predicates
+# (218-365), L2LConf + Line2Line raster + test-pattern generators + path
+# optimization + pixel helpers (519-1320)
+[[file]]
+path = "LaserGRBL/GrblFile.cs"
+tier = "importers"
+ranges = [[175, 216], [218, 365], [519, 1320]]
+
+[[file]]
+path = "LaserGRBL/Hershey/Hershey.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/SvgColorLayer.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/SvgFilling.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/VectorImportSource.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/VectorDrawing.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/VectorGCode.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/DxfReader.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/ArcFitter.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/SvgConverter/BezierTools.cs"
+tier = "importers"
+
+[[file]]
+path = "LaserGRBL/RasterConverter/ImageTransform.cs"
+tier = "importers"
+
+# --------------------------------------------------------------------- helper
+[[file]]
+path = "LaserGRBL/Tools/ExpressionEvaluator.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/Tools/Cronometro.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/Tools/ThreadClass.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CSV/CsvDictionary.cs"
+tier = "helper"
+
+# third-party code used by the importers (Cyotek dithering, Clipper-based filling)
+[[file]]
+path = "LaserGRBL/RasterConverter/Dithering/ErrorDiffusionDithering.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/RasterConverter/Dithering/RandomDithering.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/RasterConverter/Dithering/ImageUtilities.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/PotraceClipper.cs"
+tier = "helper"

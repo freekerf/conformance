@@ -1,0 +1,51 @@
+{
+ "description": "per-layer modes and order: Cut (2 passes) last, Fill first, Line in user order, Ignore skipped; a color not present in the file",
+ "kind": "svg",
+ "input": "svg/colors.svg",
+ "layers": [
+  {
+   "color": "#FF0000",
+   "mode": "Cut",
+   "speed": 300,
+   "power": 1000,
+   "passes": 2
+  },
+  {
+   "color": "#00FF00",
+   "mode": "Fill",
+   "speed": 2000,
+   "power": 400,
+   "fill": "NewHorizontal",
+   "lines_per_mm": 2
+  },
+  {
+   "color": "#123456",
+   "mode": "Line",
+   "speed": 1500,
+   "power": 600
+  },
+  {
+   "color": "#0000FF",
+   "mode": "Ignore"
+  },
+  {
+   "color": "#ABCDEF",
+   "mode": "FillAndLine",
+   "speed": 1000,
+   "power": 500,
+   "lines_per_mm": 1
+  },
+  {
+   "color": "#000000",
+   "mode": "Line",
+   "speed": 1200,
+   "power": 700
+  },
+  {
+   "color": "#999999",
+   "mode": "Line",
+   "speed": 1000,
+   "power": 100
+  }
+ ]
+}

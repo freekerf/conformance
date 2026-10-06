@@ -1,0 +1,17 @@
+{
+ "description": "threshold 0.5",
+ "kind": "image_op",
+ "op": "threshold",
+ "image": {
+  "pixels": [
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0"
+  ]
+ },
+ "args": {
+  "threshold": 0.5
+ },
+ "platform_dependent": "GDI+ ImageAttributes.SetThreshold (libgdiplus)"
+}

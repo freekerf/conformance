@@ -1,0 +1,5 @@
+{
+ "description": "the accuracy test file embedded in LaserGRBL.exe, opened by resource name (names starting with 'LaserGRBL.' are read from the assembly)",
+ "kind": "svg",
+ "resource": "LaserGRBL.Generator.SVG.LaserGRBL-accuracy-test-file.svg"
+}

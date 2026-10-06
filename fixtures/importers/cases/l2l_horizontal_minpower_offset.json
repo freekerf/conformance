@@ -1,0 +1,21 @@
+{
+ "description": "min power 200 (scaled range), offset and 5 px/mm resolution",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 40 80 C0 FF FF",
+   "FF C0 80 40 00 00",
+   "00 00 FF FF 00 00",
+   "80 80 80 80 80 80"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal",
+  "minPower": 200,
+  "maxPower": 800,
+  "oX": 12.5,
+  "oY": 3.25,
+  "res": 5.0,
+  "markSpeed": 2500
+ }
+}

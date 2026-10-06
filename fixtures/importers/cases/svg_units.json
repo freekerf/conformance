@@ -1,0 +1,5 @@
+{
+ "description": "page in inches without viewBox; element lengths in mm/cm/in/pt/pc/em/%/px; empty radius",
+ "kind": "svg",
+ "input": "svg/units.svg"
+}

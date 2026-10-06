@@ -1,0 +1,8 @@
+{
+ "description": "Disable G0 fast skip: rapid moves are G1",
+ "kind": "svg",
+ "input": "svg/basic_shapes.svg",
+ "settings": {
+  "Disable G0 fast skip": true
+ }
+}

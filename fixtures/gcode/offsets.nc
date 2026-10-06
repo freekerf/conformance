@@ -1,0 +1,9 @@
+; work coordinate offset with G92
+G0 X50 Y50
+G92 X0 Y0
+M3 S500
+G1 X10 Y0 F1000
+G1 X10 Y10
+G92 X0 Y0 Z5
+G1 X5 Y5
+M5

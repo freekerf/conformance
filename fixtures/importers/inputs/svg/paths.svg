@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- path commands: absolute and relative M/L/H/V/Z, implicit lineto, C/S/Q/T curves, A arcs, compact numbers -->
+<svg xmlns="http://www.w3.org/2000/svg" width="120mm" height="80mm" viewBox="0 0 120 80">
+  <path id="lines" d="M 5 5 L 25 5 L 25 15 Z" style="fill:none;stroke:#000000"/>
+  <path d="m30 5 l20 0 l0 10 h-20 v-10 z" style="fill:none;stroke:#000000"/>
+  <path d="M55,5 75,5 75,15 H55 V5" style="fill:none;stroke:#000000"/>
+  <path d="M80 5h10v10h-10zm15 0h10v10h-10z" style="fill:none;stroke:#000000"/>
+  <path d="M5 30 C 5 20, 25 20, 25 30 S 45 40, 45 30" style="fill:none;stroke:#000000"/>
+  <path d="M50 30 c0-10 20-10 20 0 s20 10 20 0" style="fill:none;stroke:#000000"/>
+  <path d="M5 50 Q 15 40 25 50 T 45 50" style="fill:none;stroke:#000000"/>
+  <path d="M50 50 q10-10 20 0 t20 0" style="fill:none;stroke:#000000"/>
+  <path d="M5 70 A 10 5 0 0 1 25 70 A 10 5 0 1 0 45 70" style="fill:none;stroke:#000000"/>
+  <path d="M50 70 a10 10 30 1 1 20 0 a5 5 0 0 0 10 0" style="fill:none;stroke:#000000"/>
+  <path d="M85 70 A 2 2 0 0 1 105 70" style="fill:none;stroke:#000000"/>
+  <path d="M100 30L1.1e2 30l-.5-5.5-4 .5" style="fill:none;stroke:#000000"/>
+  <path d="M100 50 C 100 45 110 45" style="fill:none;stroke:#000000"/>
+  <path d="M5 75 M8 75 L12 78" style="fill:none;stroke:#000000"/>
+  <path d="L 110 10 L 115 15 Z" style="fill:none;stroke:#000000"/>
+  <path d="" style="fill:none;stroke:#000000"/>
+  <path d="M60 60 R 5 5 L 70 60" style="fill:none;stroke:#000000"/>
+  <path d="M90 60 A 0 0 0 0 1 100 60 L 100 65" style="fill:none;stroke:#000000"/>
+  <path d="M10 60 A 5 5 0 0 0 20 60 A 5 5 0 1 0 30 60 A 5 5 0 0 1 20 60 A 5 5 0 1 1 10 60" style="fill:none;stroke:#000000"/>
+  <path d="M95 75 A 0 5 0 0 1 105 75" style="fill:none;stroke:#000000"/>
+</svg>

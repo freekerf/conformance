@@ -1,0 +1,15 @@
+{
+ "description": "threshold not applied: only the white background flattening",
+ "kind": "image_op",
+ "op": "threshold",
+ "image": {
+  "pixels": [
+   "00000000 80FF0000 FF00FF00"
+  ]
+ },
+ "args": {
+  "threshold": 0.5,
+  "apply": false
+ },
+ "platform_dependent": "GDI+ ImageAttributes.SetThreshold (libgdiplus)"
+}

@@ -1,0 +1,5 @@
+{
+ "description": "$INSUNITS=1: coordinates scaled from inches to mm",
+ "kind": "dxf",
+ "input": "dxf/inches.dxf"
+}

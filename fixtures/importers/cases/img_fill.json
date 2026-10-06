@@ -1,0 +1,21 @@
+{
+ "description": "flood fill from a point with color tolerance",
+ "kind": "image_op",
+ "op": "fill",
+ "image": {
+  "pixels": [
+   "FFFFFF FFFFFF 000000 FFFFFF",
+   "FAFAFA 000000 000000 FFFFFF",
+   "FFFFFF FFFFFF FFFFFF 646464",
+   "00FFFF FF00FF FFFF00 FFFFFF"
+  ]
+ },
+ "args": {
+  "at": [
+   0,
+   0
+  ],
+  "color": "FF0000",
+  "tolerance": 10
+ }
+}

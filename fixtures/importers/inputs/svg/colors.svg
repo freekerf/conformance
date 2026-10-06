@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- color detection: style vs attributes, stroke vs fill, inheritance, rgb()/rgb(%)/#rgb/named, none/url/currentColor, unsupported elements -->
+<svg xmlns="http://www.w3.org/2000/svg" width="100mm" height="100mm" viewBox="0 0 100 100">
+  <defs><linearGradient id="grad"><stop offset="0" stop-color="#ff0000"/></linearGradient></defs>
+  <rect x="5" y="5" width="10" height="10" style="fill:none;stroke:#FF0000"/>
+  <rect x="20" y="5" width="10" height="10" stroke="red" fill="none"/>
+  <rect x="35" y="5" width="10" height="10" style="fill:#00ff00 ; stroke : none"/>
+  <rect x="50" y="5" width="10" height="10" fill="rgb(0, 0, 255)"/>
+  <rect x="65" y="5" width="10" height="10" style="fill:rgba(0%,0%,100%,0.5)"/>
+  <rect x="80" y="5" width="10" height="10" style="stroke:#00f !important"/>
+  <g stroke="#123456" fill="none">
+    <circle cx="10" cy="30" r="5"/>
+    <g stroke="inherit"><circle cx="25" cy="30" r="5"/></g>
+    <path d="M35 25 L45 35" style="stroke:#abcdef"/>
+  </g>
+  <rect x="5" y="50" width="10" height="10" style="fill:url(#grad)"/>
+  <rect x="20" y="50" width="10" height="10" style="stroke:currentColor"/>
+  <rect x="35" y="50" width="10" height="10" style="stroke:notacolor"/>
+  <rect x="50" y="50" width="10" height="10"/>
+  <text x="5" y="80">not converted</text>
+  <image x="50" y="70" width="10" height="10" href="x.png"/>
+</svg>

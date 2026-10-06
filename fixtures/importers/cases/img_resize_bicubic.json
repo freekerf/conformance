@@ -1,0 +1,19 @@
+{
+ "description": "downscale with high quality bicubic (libgdiplus result)",
+ "kind": "image_op",
+ "op": "resize",
+ "image": {
+  "pixels": [
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0"
+  ]
+ },
+ "args": {
+  "width": 4,
+  "height": 2,
+  "interpolation": "HighQualityBicubic"
+ },
+ "platform_dependent": "GDI+ interpolation: libgdiplus blends even with NearestNeighbor"
+}

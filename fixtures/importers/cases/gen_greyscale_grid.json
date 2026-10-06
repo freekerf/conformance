@@ -1,0 +1,22 @@
+{
+ "description": "power/speed test, 2 speed rows x 3 power columns",
+ "kind": "generator",
+ "generator": "greyscale",
+ "args": {
+  "f_row": 2,
+  "s_col": 3,
+  "f_start": 500,
+  "f_end": 1500,
+  "s_start": 100,
+  "s_end": 1000,
+  "x_size": 6,
+  "y_size": 4,
+  "resolution": 2.0,
+  "f_grid": 2000,
+  "s_grid": 300,
+  "title": "",
+  "f_text": 1000,
+  "s_text": 500,
+  "ton": "M4"
+ }
+}

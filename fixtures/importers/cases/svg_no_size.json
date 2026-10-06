@@ -1,0 +1,5 @@
+{
+ "description": "no width, height or viewBox: px converted to mm, Y flipped around 0",
+ "kind": "svg",
+ "input": "svg/no_size.svg"
+}

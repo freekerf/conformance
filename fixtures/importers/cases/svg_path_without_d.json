@@ -1,0 +1,5 @@
+{
+ "description": "a <path> without d: NullReferenceException, the whole import is lost (FINDINGS)",
+ "kind": "svg",
+ "input": "svg/path_without_d.svg"
+}

@@ -1,0 +1,11 @@
+; 20 mm square, laser on in M3 constant power
+G90
+G21
+G0 X10 Y10
+M3 S800
+G1 X30 Y10 F1200
+G1 X30 Y30
+G1 X10 Y30
+G1 X10 Y10
+M5
+G0 X0 Y0

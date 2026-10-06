@@ -1,0 +1,20 @@
+{
+ "description": "outliner: pixels never reached from the point (inside the black ring) become black",
+ "kind": "image_op",
+ "op": "outline",
+ "image": {
+  "pixels": [
+   "FF FF FF FF FF",
+   "FF 00 00 00 FF",
+   "FF 00 C8 00 FF",
+   "FF 00 00 00 FF",
+   "FF FF FF FF FF"
+  ]
+ },
+ "args": {
+  "at": [
+   0,
+   0
+  ]
+ }
+}

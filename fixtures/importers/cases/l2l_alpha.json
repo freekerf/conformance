@@ -1,0 +1,13 @@
+{
+ "description": "transparent pixels are white (darkness scaled by alpha)",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "FF000000 80000000 00000000 FFFFFFFF",
+   "FF404040 40FF0000 C00000FF FF808080"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal"
+ }
+}

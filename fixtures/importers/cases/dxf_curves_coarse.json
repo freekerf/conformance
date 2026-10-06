@@ -1,0 +1,8 @@
+{
+ "description": "same curves with a coarse arc fitting tolerance (0.5 mm), read from the setting",
+ "kind": "dxf",
+ "input": "dxf/curves.dxf",
+ "settings": {
+  "Vector.SplineArcTolerance": 0.5
+ }
+}

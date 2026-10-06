@@ -1,0 +1,5 @@
+{
+ "description": "POLYLINE/VERTEX/SEQEND: 2D with bulge, 3D (world coordinates), mirrored OCS, meshes ignored, spline frame vertices skipped, stray VERTEX/SEQEND, missing SEQEND",
+ "kind": "dxf",
+ "input": "dxf/polylines.dxf"
+}

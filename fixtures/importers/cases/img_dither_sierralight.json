@@ -1,0 +1,16 @@
+{
+ "description": "error diffusion dithering SierraLight of a gray ramp",
+ "kind": "image_op",
+ "op": "dither",
+ "image": {
+  "pixels": [
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0",
+   "10 30 50 70 90 B0 D0 F0"
+  ]
+ },
+ "args": {
+  "mode": "SierraLight"
+ }
+}

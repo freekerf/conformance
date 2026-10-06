@@ -1,0 +1,5 @@
+{
+ "description": "nothing convertible: only the initial and final commands",
+ "kind": "svg",
+ "input": "svg/empty.svg"
+}

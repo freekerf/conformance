@@ -1,0 +1,9 @@
+{
+ "description": "Support Hardware PWM=false: M3/M5 laser switching, power set once per layer with S",
+ "kind": "svg",
+ "input": "svg/basic_shapes.svg",
+ "settings": {
+  "Support Hardware PWM": false,
+  "GrayScaleConversion.Gcode.LaserOptions.LaserOn": "M4"
+ }
+}

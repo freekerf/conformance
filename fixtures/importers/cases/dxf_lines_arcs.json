@@ -1,0 +1,5 @@
+{
+ "description": "LINE, ARC (wrapping, default end angle), CIRCLE, LWPOLYLINE with bulges; layer colors, ACI, true color; hidden/frozen layers, invisible and paper-space entities skipped; tiny and almost-straight arcs become lines",
+ "kind": "dxf",
+ "input": "dxf/lines_arcs.dxf"
+}

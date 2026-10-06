@@ -1,0 +1,5 @@
+{
+ "description": "INSERT: block base point, scale, rotation, mirrored OCS, non-uniform scale (circle as lines), MINSERT grid, nesting, ByBlock color, layer 0 inheritance, missing block, self-insertion depth limit",
+ "kind": "dxf",
+ "input": "dxf/blocks.dxf"
+}

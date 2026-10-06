@@ -1,0 +1,14 @@
+{
+ "description": "near-white pixels become light pink (preview)",
+ "kind": "image_op",
+ "op": "whitenize",
+ "image": {
+  "pixels": [
+   "FFFFFF FAFAFA F0F0F0 000000"
+  ]
+ },
+ "args": {
+  "threshold": 20,
+  "demo": true
+ }
+}

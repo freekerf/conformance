@@ -1,0 +1,21 @@
+{
+ "description": "grayscale Custom weights with brightness and contrast",
+ "kind": "image_op",
+ "op": "grayscale",
+ "image": {
+  "pixels": [
+   "FF0000 00FF00 0000FF FFFFFF",
+   "808080 C08040 000000 4080C0",
+   "10FF10 FF10FF 7F7F7F 202020"
+  ]
+ },
+ "args": {
+  "formula": "Custom",
+  "r": 2.0,
+  "g": 0.5,
+  "b": 0.5,
+  "brightness": 0.1,
+  "contrast": 1.5
+ },
+ "platform_dependent": "GDI+ ColorMatrix (libgdiplus rounding)"
+}

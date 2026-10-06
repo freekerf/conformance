@@ -1,0 +1,5 @@
+{
+ "description": "nested group transforms and element transforms",
+ "kind": "svg",
+ "input": "svg/transforms.svg"
+}

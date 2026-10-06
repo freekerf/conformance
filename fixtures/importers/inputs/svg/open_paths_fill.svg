@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- a square made of 4 separate open lines (as exported by CAD): joined before filling; one stray line stays open -->
+<svg xmlns="http://www.w3.org/2000/svg" width="30mm" height="30mm" viewBox="0 0 30 30">
+  <line x1="5" y1="5" x2="25" y2="5" stroke="#000000"/>
+  <line x1="25" y1="25" x2="25" y2="5" stroke="#000000"/>
+  <line x1="25" y1="25" x2="5" y2="25" stroke="#000000"/>
+  <line x1="5" y1="5" x2="5" y2="25" stroke="#000000"/>
+  <line x1="2" y1="28" x2="28" y2="28" stroke="#000000"/>
+  <line x1="1" y1="1" x2="1" y2="1" stroke="#000000"/>
+</svg>

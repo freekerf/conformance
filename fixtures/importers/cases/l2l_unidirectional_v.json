@@ -1,0 +1,18 @@
+{
+ "description": "Unidirectional Engraving, vertical",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "FF FF FF FF FF",
+   "FF 00 00 00 FF",
+   "FF 00 3C 00 FF",
+   "FF FF FF FF FF"
+  ]
+ },
+ "conf": {
+  "dir": "Vertical"
+ },
+ "settings": {
+  "Unidirectional Engraving": true
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "description": "centerline converter with offset settings, legacy bezier and border speed, G0 disabled",
+ "kind": "svg_text",
+ "input": "svg/autotrace_out.svg",
+ "max_size": 30.0,
+ "offset": [
+  5.5,
+  -2.0
+ ],
+ "settings": {
+  "Vector.UseSmartBezier": false,
+  "GrayScaleConversion.VectorizeOptions.BorderSpeed": 2500,
+  "Disable G0 fast skip": true
+ }
+}

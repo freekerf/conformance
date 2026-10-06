@@ -1,0 +1,12 @@
+{
+ "description": "shake test on X, axis 220 mm",
+ "kind": "generator",
+ "generator": "shake",
+ "args": {
+  "axis": "X",
+  "flimit": 5000,
+  "axislen": 220,
+  "cpower": 800,
+  "cspeed": 1500
+ }
+}

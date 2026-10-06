@@ -1,0 +1,15 @@
+{
+ "description": "lines_per_mm 0: no filling, outline only",
+ "kind": "svg",
+ "input": "svg/fill_shapes.svg",
+ "layers": [
+  {
+   "color": "#000000",
+   "mode": "FillAndLine",
+   "speed": 1000,
+   "power": 500,
+   "fill": "NewHorizontal",
+   "lines_per_mm": 0
+  }
+ ]
+}

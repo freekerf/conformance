@@ -1,0 +1,11 @@
+{
+ "description": "characters outside 32..126 (tab, accented, euro) are skipped without advancing",
+ "kind": "hershey",
+ "text": "a\tb\u00e9c\u20ac",
+ "x": 0.0,
+ "y": 0.0,
+ "speed": 1000,
+ "power": 1000,
+ "horizontal": true,
+ "ton": "M4"
+}

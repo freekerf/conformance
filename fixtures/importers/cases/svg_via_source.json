@@ -1,0 +1,10 @@
+{
+ "description": "LoadImportedVector with the already parsed source (the dialog path), border speed from settings",
+ "kind": "svg",
+ "input": "svg/basic_shapes.svg",
+ "via_source": true,
+ "settings": {
+  "GrayScaleConversion.VectorizeOptions.BorderSpeed": 1234,
+  "GrayScaleConversion.Gcode.LaserOptions.PowerMax": 777
+ }
+}

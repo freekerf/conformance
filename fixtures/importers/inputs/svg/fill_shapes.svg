@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- closed shapes for the hatch filling: an "O" (outer and inner circle = hole) and a square -->
+<svg xmlns="http://www.w3.org/2000/svg" width="40mm" height="20mm" viewBox="0 0 40 20">
+  <circle cx="10" cy="10" r="8" style="fill:#000000"/>
+  <circle cx="10" cy="10" r="4" style="fill:#000000"/>
+  <rect x="24" y="4" width="12" height="12" style="fill:#ff0000"/>
+  <path d="M24 2 L36 2" style="stroke:#ff0000;fill:none"/>
+  <rect x="2" y="2" width="6" height="4" rx="1" style="fill:#00ff00"/>
+  <path d="M30 18" style="fill:#00ff00"/>
+  <path d="L 4 1 L 8 1 L 6 0 Z" style="fill:#0000ff"/>
+</svg>

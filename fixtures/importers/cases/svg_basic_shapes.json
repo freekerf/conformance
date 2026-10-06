@@ -1,0 +1,5 @@
+{
+ "description": "rect (plain, rx, ry, rx!=ry), circle, ellipse, line, polyline, polygon (incl. one without commas)",
+ "kind": "svg",
+ "input": "svg/basic_shapes.svg"
+}

@@ -1,0 +1,16 @@
+{
+ "scan": [
+  {
+   "color": "#000000",
+   "count": 2
+  }
+ ],
+ "gcode": [],
+ "summary": {
+  "count": 0,
+  "estimated_time_s": 0.0,
+  "drawing_range": null,
+  "moving_range": null
+ },
+ "error": "System.NullReferenceException: Object reference not set to an instance of an object."
+}

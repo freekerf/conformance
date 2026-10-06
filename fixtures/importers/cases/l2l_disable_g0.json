@@ -1,0 +1,18 @@
+{
+ "description": "Disable G0 fast skip: G1 for travel moves",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "FF FF FF FF FF",
+   "FF 00 00 00 FF",
+   "FF 00 3C 00 FF",
+   "FF FF FF FF FF"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal"
+ },
+ "settings": {
+  "Disable G0 fast skip": true
+ }
+}

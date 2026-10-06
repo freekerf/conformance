@@ -1,0 +1,15 @@
+; dynamic power raster-like scan
+G90
+M4
+G0 X0 Y0
+G1 X1 S0 F3000
+G1 X2 S255
+G1 X3 S128
+G1 X4 S0
+G0 X4 Y0.1
+G1 X3 S64
+G1 X2 S192
+G1 X1 S0
+G0 X0 Y0.2
+G1 X4 S1000
+M5 S0

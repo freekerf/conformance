@@ -1,0 +1,14 @@
+{
+ "description": "diagonal Line2Line on a square image",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 80 FF",
+   "FF 00 80",
+   "80 FF 00"
+  ]
+ },
+ "conf": {
+  "dir": "Diagonal"
+ }
+}

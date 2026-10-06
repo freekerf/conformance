@@ -1,0 +1,18 @@
+{
+ "scan": [],
+ "gcode": [
+  "M3 S0",
+  "M5 S0"
+ ],
+ "summary": {
+  "count": 2,
+  "estimated_time_s": 0.0,
+  "drawing_range": null,
+  "moving_range": [
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ]
+ }
+}

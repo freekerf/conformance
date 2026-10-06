@@ -1,0 +1,555 @@
+# Lines inside scope.toml that this suite cannot (or should not) execute, with the
+# reason. The coverage report shows both raw coverage and coverage net of these.
+# Line numbers refer to the source at bf15096. Categories:
+#   ui        needs WinForms with a display (dialogs, MessageBox, Cursor); the
+#             harness is headless by design
+#   marshal   Control.BeginInvoke branch (needs a real Control and a message loop)
+#   windows   Windows-only API (WMI)
+#   platform  .NET Framework vs Mono difference
+#   dead      no caller / unreachable by construction (see FINDINGS.md when relevant)
+#   external  side effect outside the process (opens the browser)
+#   race      only reachable through a thread race or an I/O failure that cannot
+#             be forced deterministically
+#   3d        branch on the SharpGL display list (3D preview, out of scope)
+#   fixed-option  code behind a private option that is hard-coded and never changed
+#             at run time (GCodeFromSVG: svgComments, svgNodesOnly, gcodeReduce,
+#             svgConvertToMM; gcode: gcodeCompress, gcodeNoArcs, gcodeDragCompensation)
+#   defensive guard against a failure of embedded third-party code that valid input
+#             does not produce
+
+# ---------------------------------------------------------------- GrblCore.cs
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [240, 240]
+category = "dead"
+reason = "VendorName: ToLower() compared with \"Vigotec\" can never match (FINDINGS F-05)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [405, 428]
+category = "windows"
+reason = "GetCH340Version enumerates WMI Win32_PnPSignedDriver; System.Management throws on Mono before the loop"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [463, 463]
+category = "dead"
+reason = "ValidateConfig: GrblCore.Configuration never returns null (getter falls back to a new GrblConfST)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [582, 590]
+category = "dead"
+reason = "RiseJogStateChange has no caller: the JogStateChange event is never raised"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [597, 597]
+category = "marshal"
+reason = "RiseIssueDetected BeginInvoke branch (InvokeRequired is false for the harness' uninitialized Control)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [608, 608]
+category = "marshal"
+reason = "RiseMachineStatusChanged BeginInvoke branch"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [619, 619]
+category = "marshal"
+reason = "RiseOverrideChanged BeginInvoke branch"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [648, 657]
+category = "ui"
+reason = "NewProject: confirmation MessageBox, then clears the workspace"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [676, 703]
+category = "ui"
+reason = "OpenFile without a file name: OpenFileDialog"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [711, 792]
+category = "ui"
+reason = "OpenFile raster/SVG/DXF import: importer dialogs (RasterToLaserForm, SvgToGCodeForm) and Cursor; importers are phase 2"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [798, 806]
+category = "ui"
+reason = "OpenFile G-code: Cursor.Current = WaitCursor needs a display and throws before GrblFile.LoadFile (loading itself is tested through GrblFile)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [838, 838]
+category = "ui"
+reason = "end of the unsupported-file MessageBox branch (the MessageBox throws headless)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [847, 857]
+category = "dead"
+reason = "GetEncoder has no caller (its use is commented out)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [862, 895]
+category = "ui"
+reason = "SaveProgram: SaveFileDialog (GrblFile.SaveGCODE itself is tested)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [901, 934]
+category = "ui"
+reason = "SaveProject: SaveFileDialog"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1046, 1049]
+category = "dead"
+reason = "ManageVerMessage catch: Substring cannot fail for a line that matched [VER:...]"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1144, 1146]
+category = "dead"
+reason = "ReadConfigCountException is never thrown"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1219, 1222]
+category = "dead"
+reason = "WriteLongerWiFi catch: nothing in the try can throw except a collection-modified race; the error count is discarded"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1264, 1267]
+category = "dead"
+reason = "WriteOrturWiFi catch: same as above"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1336, 1336]
+category = "ui"
+reason = "RunProgram on a partially executed job: ResumeJobForm dialog (resume logic itself is tested via ContinueProgramFromKnown)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1369, 1390]
+category = "ui"
+reason = "RunProgramFromPosition / UserWantToContinue: RunFromPositionForm and ResumeJobForm dialogs"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1396, 1396]
+category = "ui"
+reason = "SafetyCountdown dialog cancelled (tests disable the countdown)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1447, 1447]
+category = "ui"
+reason = "SafetyCountdown dialog cancelled on resume"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [1553, 1553]
+category = "ui"
+reason = "end of OpenCom's catch, after the error MessageBox (throws headless)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [2137, 2140]
+category = "dead"
+reason = "BufferIsFull has no caller"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [2388, 2390]
+category = "dead"
+reason = "ManageOrturBlockingAlarm has no caller (dispatch commented out)"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [3252, 3252]
+category = "external"
+reason = "HelpOnLine opens https://lasergrbl.com/usage/ in the user's browser"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [3416, 3426]
+category = "dead"
+reason = "StringToGCode has no caller"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [3952, 3956]
+category = "dead"
+reason = "GrblConfST.CompareValues has no caller"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [4575, 4576]
+category = "ui"
+reason = "LaserLifeHandler.OnConnect: result of the LaserSelector dialog"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [4730, 4730]
+category = "dead"
+reason = "EscapeJson: a boxed double also matches the previous `is double?` test"
+
+[[exclusion]]
+file = "LaserGRBL/Core/GrblCore.cs"
+lines = [4765, 4765]
+category = "race"
+reason = "RealDoSave: deleting the counter file is only reached when renaming it to .old failed"
+
+# ---------------------------------------------------------------- other core files
+[[exclusion]]
+file = "LaserGRBL/Core/MarlinCore.cs"
+lines = [59, 61]
+category = "dead"
+reason = "Marlin's ParseMachineStatus only produces Idle or Disconnected, never Hold"
+
+[[exclusion]]
+file = "LaserGRBL/StateBuilder.cs"
+lines = [199, 199]
+category = "dead"
+reason = "GetSegmentLenght is only called for linear or arc movements"
+
+[[exclusion]]
+file = "LaserGRBL/ComWrapper/UsbSerial.cs"
+lines = [187, 192]
+category = "platform"
+reason = "MySerial.Dispose reads .NET Framework's private internalSerialStream field; Mono's SerialPort has no such field, so the stream is always null"
+
+[[exclusion]]
+file = "LaserGRBL/GrblCommand.cs"
+lines = [167, 167]
+category = "3d"
+reason = "ClearResult: LinkedDisplayList?.Invalidate() non-null branch needs the SharpGL 3D preview"
+
+[[exclusion]]
+file = "LaserGRBL/GrblCommand.cs"
+lines = [331, 331]
+category = "3d"
+reason = "SetResult: same LinkedDisplayList branch"
+
+# ------------------------------------------------------------- importers (phase 2)
+[[exclusion]]
+file = "LaserGRBL/GrblFile.cs"
+lines = [311, 311]
+category = "dead"
+reason = "VSeparator: mPixLen < 0 is impossible, separators are always built with rev = false"
+
+[[exclusion]]
+file = "LaserGRBL/GrblFile.cs"
+lines = [328, 328]
+category = "dead"
+reason = "HSeparator: same impossible negative length"
+
+[[exclusion]]
+file = "LaserGRBL/GrblFile.cs"
+lines = [836, 838]
+category = "dead"
+reason = "map(): no caller"
+
+[[exclusion]]
+file = "LaserGRBL/GrblFile.cs"
+lines = [1297, 1305]
+category = "dead"
+reason = "DirectionChange: no caller (its only user TravelCost is commented out)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [119, 122]
+category = "dead"
+reason = "convertFromFile: no caller (the dialog parses the file once and uses convertFromXml)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [316, 316]
+category = "fixed-option"
+reason = "svgConvertToMM is never set to false: inch output is never used"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [367, 367]
+category = "fixed-option"
+reason = "svgConvertToMM false with SvgScaleApply"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [409, 410]
+category = "fixed-option"
+reason = "svgComments (group comments)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [451, 453]
+category = "dead"
+reason = "parseTransform for a group at level 0: parseGroup always starts at level 1"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [600, 604]
+category = "fixed-option"
+reason = "svgComments (basic shape comments)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [728, 728]
+category = "dead"
+reason = "unknown basic shape: the loop only visits the fixed list of known forms"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [763, 769]
+category = "fixed-option"
+reason = "svgComments (path comments)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [807, 832]
+category = "dead"
+reason = "filterByColor body: the only caller passing a filter (convertFromText) always uses ColorFilter.All"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [835, 867]
+category = "dead"
+reason = "parseRgb, parseStyle, parseColorAttributes: only used by the filterByColor body"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [917, 917]
+category = "fixed-option"
+reason = "svgNodesOnly (M)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [928, 928]
+category = "fixed-option"
+reason = "svgNodesOnly (M)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [965, 965]
+category = "fixed-option"
+reason = "svgNodesOnly (L)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [983, 983]
+category = "fixed-option"
+reason = "svgNodesOnly (H)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1001, 1001]
+category = "fixed-option"
+reason = "svgNodesOnly (V)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1030, 1030]
+category = "fixed-option"
+reason = "svgNodesOnly (A)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1066, 1068]
+category = "fixed-option"
+reason = "svgNodesOnly (C)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1107, 1109]
+category = "fixed-option"
+reason = "svgNodesOnly (S)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1152, 1154]
+category = "fixed-option"
+reason = "svgNodesOnly (Q)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1193, 1195]
+category = "fixed-option"
+reason = "svgNodesOnly (T)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1253, 1255]
+category = "dead"
+reason = "calcArc: CalculateVectorAngle never returns a negative angle, so 'Sweep == 1 && dtheta < 0' is impossible"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1303, 1305]
+category = "dead"
+reason = "fsqrt/fvmag/fdistance: no caller in this class"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1377, 1381]
+category = "fixed-option"
+reason = "gcodeDotOnly is only used with svgNodesOnly"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1409, 1412]
+category = "fixed-option"
+reason = "gcodeReduce (stop path)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1450, 1460]
+category = "fixed-option"
+reason = "gcodeReduce (move)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1484, 1487]
+category = "fixed-option"
+reason = "gcodeReduce (arc)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
+lines = [1505, 1505]
+category = "dead"
+reason = "gcodePenDown while capturing: every caller returns earlier when capturing"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [103, 111]
+category = "dead"
+reason = "reduceGCode property: no caller"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [122, 122]
+category = "fixed-option"
+reason = "gcodeCompress is always true (reduceGCode is never set)"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [126, 161]
+category = "dead"
+reason = "getIntGCode/getStrGCode/getIntValue/getStringValue: no caller"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [167, 168]
+category = "dead"
+reason = "frmtNum(double): no caller"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [303, 306]
+category = "dead"
+reason = "MoveTo(float...) overloads: no caller"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [311, 314]
+category = "dead"
+reason = "MoveToRapid(float, float): no caller"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [328, 331]
+category = "fixed-option"
+reason = "gcodeDragCompensation is always false"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [422, 466]
+category = "fixed-option"
+reason = "dragToolCompensation: only used with gcodeDragCompensation"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [509, 512]
+category = "dead"
+reason = "Move with a Z coordinate: no caller passes z"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [533, 535]
+category = "dead"
+reason = "Move with a Z coordinate"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [556, 563]
+category = "fixed-option"
+reason = "uncompressed output: gcodeCompress is always true"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [569, 587]
+category = "dead"
+reason = "splitLine: no caller"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [592, 593]
+category = "dead"
+reason = "Arc(float...) overload: no caller"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [613, 615]
+category = "fixed-option"
+reason = "splitArc call: gcodeNoArcs is always false and every caller passes avoidG23 = false"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/gcodeRelated.cs"
+lines = [626, 728]
+category = "fixed-option"
+reason = "splitArc and getAngle: only reached through gcodeNoArcs / avoidG23 / drag compensation"
+
+[[exclusion]]
+file = "LaserGRBL/SvgConverter/SvgFilling.cs"
+lines = [62, 62]
+category = "defensive"
+reason = "PotraceClipper.BuildFilling returns null only when Clipper.Execute fails"
+
+[[exclusion]]
+file = "LaserGRBL/RasterConverter/ImageTransform.cs"
+lines = [359, 359]
+category = "dead"
+reason = "ColorSubstitution: result below 0 is impossible (source within the threshold of the filter color, new color >= 0)"
+
+[[exclusion]]
+file = "LaserGRBL/RasterConverter/ImageTransform.cs"
+lines = [366, 366]
+category = "dead"
+reason = "same, green"
+
+[[exclusion]]
+file = "LaserGRBL/RasterConverter/ImageTransform.cs"
+lines = [373, 373]
+category = "dead"
+reason = "same, red"
+
+[[exclusion]]
+file = "LaserGRBL/RasterConverter/ImageTransform.cs"
+lines = [390, 404]
+category = "dead"
+reason = "Format32bppArgbCopy: no caller"
+
+[[exclusion]]
+file = "LaserGRBL/RasterConverter/ImageTransform.cs"
+lines = [443, 448]
+category = "dead"
+reason = "DirectBitmap.Dispose: no caller (Fill and Outliner never dispose it)"

@@ -1,0 +1,22 @@
+{
+ "description": "power/speed test, a single cell (no steps), custom title, fractional resolution",
+ "kind": "generator",
+ "generator": "greyscale",
+ "args": {
+  "f_row": 1,
+  "s_col": 1,
+  "f_start": 1000,
+  "f_end": 1000,
+  "s_start": 500,
+  "s_end": 500,
+  "x_size": 3,
+  "y_size": 2,
+  "resolution": 1.5,
+  "f_grid": 1500,
+  "s_grid": 200,
+  "title": "Slate",
+  "f_text": 900,
+  "s_text": 400,
+  "ton": "M3"
+ }
+}

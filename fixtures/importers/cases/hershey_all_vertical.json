@@ -1,0 +1,11 @@
+{
+ "description": "every printable ASCII character, vertical font table",
+ "kind": "hershey",
+ "text": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~",
+ "x": 5.0,
+ "y": 100.0,
+ "speed": 800,
+ "power": 300,
+ "horizontal": false,
+ "ton": "M3"
+}

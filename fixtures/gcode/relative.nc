@@ -1,0 +1,12 @@
+; relative moves
+G90
+G0 X5 Y5
+G91
+M3 S300
+G1 X10 F600
+G1 Y10
+G1 X-10
+G1 Y-10
+G90
+M5
+G0 X0 Y0

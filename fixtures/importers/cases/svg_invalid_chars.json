@@ -1,0 +1,5 @@
+{
+ "description": "characters not allowed in XML are removed before parsing",
+ "kind": "svg",
+ "input": "svg/invalid_chars.svg"
+}

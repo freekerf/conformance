@@ -1,0 +1,17 @@
+{
+ "description": "Unidirectional Engraving, diagonal",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 FF 00 80 00 FF 00",
+   "FF 00 FF 00 40 00 FF",
+   "00 00 00 FF FF 00 00"
+  ]
+ },
+ "conf": {
+  "dir": "Diagonal"
+ },
+ "settings": {
+  "Unidirectional Engraving": true
+ }
+}

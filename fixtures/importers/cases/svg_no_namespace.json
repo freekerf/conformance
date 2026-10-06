@@ -1,0 +1,5 @@
+{
+ "description": "svg without xmlns: elements without namespace are still converted",
+ "kind": "svg",
+ "input": "svg/no_namespace.svg"
+}

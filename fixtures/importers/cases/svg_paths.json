@@ -1,0 +1,5 @@
+{
+ "description": "path commands M/L/H/V/Z (abs/rel, implicit lineto), C/S/Q/T, A (flags, radius too small), exponent numbers, missing curve argument",
+ "kind": "svg",
+ "input": "svg/paths.svg"
+}

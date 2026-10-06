@@ -1,0 +1,23 @@
+{
+ "description": "hatch filling NewCross of an 'O' (hole) and a square, outline of the square layer",
+ "kind": "svg",
+ "input": "svg/fill_shapes.svg",
+ "layers": [
+  {
+   "color": "#000000",
+   "mode": "Fill",
+   "speed": 2000,
+   "power": 500,
+   "fill": "NewCross",
+   "lines_per_mm": 1
+  },
+  {
+   "color": "#FF0000",
+   "mode": "FillAndLine",
+   "speed": 1000,
+   "power": 800,
+   "fill": "NewCross",
+   "lines_per_mm": 0.5
+  }
+ ]
+}

@@ -1,0 +1,5 @@
+<?xml version="1.0" standalone="yes"?>
+<svg width="120" height="80">
+<path style="stroke:#000000; fill:none;" d="M10 70L50 70C60 70 70 60 70 50L70 10"/>
+<path style="stroke:#000000; fill:none;" d="M90 10Q110 40 90 70"/>
+</svg>

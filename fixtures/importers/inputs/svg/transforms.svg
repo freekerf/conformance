@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- group and element transforms: translate, scale (1 and 2 args), rotate (with and without center), matrix, chains, nesting -->
+<svg xmlns="http://www.w3.org/2000/svg" width="100mm" height="100mm" viewBox="0 0 100 100">
+  <g id="g1" transform="translate(10,10)">
+    <rect x="0" y="0" width="10" height="5" style="fill:none;stroke:#000000"/>
+    <g transform="scale(2)">
+      <line x1="0" y1="10" x2="5" y2="10" style="stroke:#000000"/>
+      <g transform="rotate(90)">
+        <line x1="0" y1="0" x2="5" y2="0" style="stroke:#000000"/>
+      </g>
+    </g>
+    <path d="M0 40 L10 40" transform="scale(1 3)" style="fill:none;stroke:#000000"/>
+  </g>
+  <g transform="translate(50 50) rotate(45)">
+    <rect x="-5" y="-5" width="10" height="10" style="fill:none;stroke:#000000"/>
+  </g>
+  <rect x="70" y="10" width="10" height="10" transform="rotate(30, 75, 15)" style="fill:none;stroke:#000000"/>
+  <circle cx="0" cy="0" r="5" transform="matrix(1,0,0,1,80,80)" style="fill:none;stroke:#000000"/>
+  <circle cx="0" cy="0" r="5" transform="matrix(2 0 0 1 20 80)" style="fill:none;stroke:#000000"/>
+  <path d="M60 60 L70 60" transform="translate(5) scale(0.5,2)" style="fill:none;stroke:#000000"/>
+  <rect x="10" y="60" width="10" height="5" transform="skewX(30)" style="fill:none;stroke:#000000"/>
+  <rect x="10" y="70" width="10" height="5" transform="translate(5,5" style="fill:none;stroke:#000000"/>
+</svg>

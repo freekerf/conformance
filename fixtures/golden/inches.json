@@ -1,0 +1,60 @@
+{
+ "input": "inches.nc",
+ "commands": [
+  "",
+  "G20",
+  "G90",
+  "G0 X1 Y1",
+  "M3 S100",
+  "G1 X2 Y1 F10",
+  "M5"
+ ],
+ "wire": [
+  "",
+  "G20",
+  "G90",
+  "G0X1Y1",
+  "M3S100",
+  "G1X2Y1F10",
+  "M5"
+ ],
+ "offsets_s": [
+  0.0,
+  0.0,
+  0.0,
+  0.014,
+  0.014,
+  6.014,
+  6.014
+ ],
+ "estimated_time_s": 6.014,
+ "drawing_range": [
+  1.0,
+  1.0,
+  2.0,
+  1.0
+ ],
+ "moving_range": [
+  0.0,
+  0.0,
+  2.0,
+  1.0
+ ],
+ "spindle_range": {
+  "min": 0.0,
+  "max": 100.0,
+  "valid": true
+ },
+ "quadrant": "I",
+ "stream": [
+  "G90",
+  "",
+  "G20",
+  "G90",
+  "G0X1Y1",
+  "M3S100",
+  "G1X2Y1F10",
+  "M5",
+  "G0X0Y0Z0"
+ ]
+}

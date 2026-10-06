@@ -1,0 +1,6 @@
+{
+ "description": "same curves with spline_tolerance 0: splines as short lines",
+ "kind": "dxf",
+ "input": "dxf/curves.dxf",
+ "spline_tolerance": 0
+}

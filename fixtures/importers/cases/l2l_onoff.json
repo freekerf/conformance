@@ -1,0 +1,18 @@
+{
+ "description": "no PWM: laser on/off commands, pixels darker than 125 on (lOn M4)",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 40 80 C0 FF FF",
+   "FF C0 80 40 00 00",
+   "00 00 FF FF 00 00",
+   "80 80 80 80 80 80"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal",
+  "pwm": false,
+  "lOn": "M4",
+  "lOff": "M5"
+ }
+}

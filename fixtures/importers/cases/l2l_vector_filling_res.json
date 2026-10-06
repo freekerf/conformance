@@ -1,0 +1,17 @@
+{
+ "description": "vectorfilling=true: coordinates divided by fres instead of res",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 80 FF",
+   "FF 00 80",
+   "80 FF 00"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal",
+  "vectorfilling": true,
+  "res": 10.0,
+  "fres": 4.0
+ }
+}

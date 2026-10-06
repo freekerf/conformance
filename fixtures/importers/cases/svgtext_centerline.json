@@ -1,0 +1,6 @@
+{
+ "description": "centerline converter half: autotrace-like svg (px, no namespace) scaled to the bitmap size / 10 mm",
+ "kind": "svg_text",
+ "input": "svg/autotrace_out.svg",
+ "max_size": 12.0
+}

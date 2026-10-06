@@ -1,0 +1,16 @@
+{
+ "description": "diagonal Line2Line on a tall image (central part uses V separators)",
+ "kind": "raster",
+ "image": {
+  "pixels": [
+   "00 FF 00",
+   "FF 00 FF",
+   "00 00 00",
+   "FF FF 00",
+   "64 C8 32"
+  ]
+ },
+ "conf": {
+  "dir": "Diagonal"
+ }
+}

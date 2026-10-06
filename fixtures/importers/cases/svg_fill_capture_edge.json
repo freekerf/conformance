@@ -1,0 +1,23 @@
+{
+ "description": "filling of a rounded rect (captured quarter arcs), a lone moveto, and a path starting without moveto",
+ "kind": "svg",
+ "input": "svg/fill_shapes.svg",
+ "layers": [
+  {
+   "color": "#00FF00",
+   "mode": "FillAndLine",
+   "speed": 1000,
+   "power": 500,
+   "fill": "NewHorizontal",
+   "lines_per_mm": 2
+  },
+  {
+   "color": "#0000FF",
+   "mode": "Fill",
+   "speed": 1000,
+   "power": 500,
+   "fill": "NewVertical",
+   "lines_per_mm": 2
+  }
+ ]
+}

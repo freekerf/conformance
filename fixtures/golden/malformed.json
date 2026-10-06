@@ -1,0 +1,51 @@
+{
+ "input": "malformed.nc",
+ "commands": [
+  "",
+  "G1 X1..5 Y2",
+  "G90 G1 X3 Y3",
+  "G1 X-4-2 Y1",
+  "X5 Y5 Z",
+  "M3 S"
+ ],
+ "wire": [
+  "",
+  "G1X1..5Y2",
+  "G90G1X3Y3",
+  "G1X-4-2Y1",
+  "X5Y5Z",
+  "M3S"
+ ],
+ "offsets_s": [
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "estimated_time_s": 0.0,
+ "drawing_range": null,
+ "moving_range": [
+  0.0,
+  0.0,
+  5.0,
+  5.0
+ ],
+ "spindle_range": {
+  "min": 0.0,
+  "max": 0.0,
+  "valid": false
+ },
+ "quadrant": "Unknown",
+ "stream": [
+  "G90",
+  "",
+  "G1X1..5Y2",
+  "G90G1X3Y3",
+  "G1X-4-2Y1",
+  "X5Y5Z",
+  "M3S",
+  "G0X0Y0Z0"
+ ]
+}

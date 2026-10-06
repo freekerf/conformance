@@ -1,0 +1,16 @@
+# Python (core-tests)
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+coverage-report/
+
+# Mono crash dumps (written to the working directory when the runtime aborts)
+mono_crash.*.json
+
+
+# editors / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store

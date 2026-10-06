@@ -1,0 +1,17 @@
+{
+ "description": "Centerline with the dialog defaults (corner threshold 110, line threshold 1.0): autotrace command line, the png it gets (not flipped), and the replayed svg scaled to max(width, height) / 10 mm; power S255 = the PowerMax setting default",
+ "kind": "centerline",
+ "image": {
+  "ascii": [
+   "............",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".#####...#..",
+   "............"
+  ]
+ },
+ "autotrace_output": "svg/autotrace_out.svg"
+}

@@ -1,0 +1,25 @@
+{
+ "description": "raster filling without PWM: M5 S<MaxPWM> header for the filling",
+ "kind": "potrace",
+ "image": {
+  "ascii": [
+   "............",
+   "............",
+   "............",
+   "...######...",
+   "...######...",
+   "...######...",
+   "...######...",
+   "...######...",
+   "...######...",
+   "............",
+   "............",
+   "............"
+  ]
+ },
+ "conf": {
+  "dir": "Vertical",
+  "pwm": false
+ },
+ "platform_dependent": "GDI+ path fill and bicubic resize (libgdiplus)"
+}

@@ -169,6 +169,63 @@ namespace LaserGRBLTests
 		}
 	}
 
+	// Subscribes to the static ImageProcessor events (raised on its preview / G-code
+	// threads) and records them; Detach() before dropping the probe.
+	public class ImageProcessorProbe
+	{
+		private readonly ManualResetEvent complete = new ManualResetEvent(false);
+		private readonly ManualResetEvent ready = new ManualResetEvent(false);
+		public int Begin, Ready, Complete;
+		public Exception LastError;
+		public System.Drawing.Size LastPreviewSize;
+		public string LastPreviewPixels; // AARRGGBB tokens, rows separated by '\n'
+
+		public ImageProcessorProbe()
+		{
+			LaserGRBL.RasterConverter.ImageProcessor.PreviewBegin += OnBegin;
+			LaserGRBL.RasterConverter.ImageProcessor.PreviewReady += OnReady;
+			LaserGRBL.RasterConverter.ImageProcessor.GenerationComplete += OnComplete;
+		}
+
+		public void Detach()
+		{
+			LaserGRBL.RasterConverter.ImageProcessor.PreviewBegin -= OnBegin;
+			LaserGRBL.RasterConverter.ImageProcessor.PreviewReady -= OnReady;
+			LaserGRBL.RasterConverter.ImageProcessor.GenerationComplete -= OnComplete;
+		}
+
+		private void OnBegin() { Interlocked.Increment(ref Begin); }
+
+		private void OnReady(System.Drawing.Image img)
+		{
+			System.Drawing.Bitmap bmp = (System.Drawing.Bitmap)img;
+			StringBuilder sb = new StringBuilder();
+			for (int y = 0; y < bmp.Height; y++)
+			{
+				if (y > 0) sb.Append('\n');
+				for (int x = 0; x < bmp.Width; x++)
+				{
+					if (x > 0) sb.Append(' ');
+					sb.Append(bmp.GetPixel(x, y).ToArgb().ToString("X8"));
+				}
+			}
+			lock (this) { LastPreviewSize = bmp.Size; LastPreviewPixels = sb.ToString(); }
+			Interlocked.Increment(ref Ready);
+			ready.Set();
+		}
+
+		private void OnComplete(Exception ex)
+		{
+			LastError = ex;
+			Interlocked.Increment(ref Complete);
+			complete.Set();
+		}
+
+		public bool WaitComplete(int timeoutMs) { return complete.WaitOne(timeoutMs); }
+		public bool WaitReady(int timeoutMs) { return ready.WaitOne(timeoutMs); }
+		public void ResetReady() { ready.Reset(); }
+	}
+
 	// Subscribes to the static Grblv11Emulator.EmulatorMessage event (raised on the
 	// emulator's own threads) and records the messages.
 	public static class EmulatorProbe

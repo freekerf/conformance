@@ -1,0 +1,15 @@
+{
+ "gcode": [],
+ "summary": {
+  "count": 0,
+  "estimated_time_s": 0.0,
+  "drawing_range": null,
+  "moving_range": [
+   0.0,
+   0.0,
+   400.0,
+   300.0
+  ]
+ },
+ "generation_error": "System.InvalidOperationException: Target size too big for processing!"
+}

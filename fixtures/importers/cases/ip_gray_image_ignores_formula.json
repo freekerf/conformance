@@ -1,0 +1,26 @@
+{
+ "description": "a gray-scale image always uses SimpleAverage: the Custom formula and RGB weights are ignored",
+ "kind": "image_processor",
+ "image": {
+  "pixels": [
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0"
+  ]
+ },
+ "options": {
+  "Formula": "Custom",
+  "Red": 10,
+  "Green": 200,
+  "Blue": 0,
+  "Quality": 10
+ },
+ "target": {
+  "size": [
+   0.8,
+   0.4
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

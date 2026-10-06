@@ -1,0 +1,43 @@
+{
+ "description": "dialog edits before generating: crop (in preview coordinates), rotate clockwise, invert",
+ "kind": "image_processor",
+ "image": {
+  "pixels": [
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0"
+  ]
+ },
+ "edits": [
+  {
+   "op": "crop",
+   "rect": [
+    25,
+    0,
+    50,
+    50
+   ],
+   "rsize": [
+    100,
+    50
+   ]
+  },
+  {
+   "op": "rotate_cw"
+  },
+  {
+   "op": "invert"
+  }
+ ],
+ "options": {
+  "Quality": 10
+ },
+ "target": {
+  "size": [
+   0.4,
+   0.4
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

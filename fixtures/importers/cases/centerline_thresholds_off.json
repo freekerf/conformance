@@ -1,0 +1,21 @@
+{
+ "description": "Centerline with corner and line thresholds disabled: only -centerline and the background color",
+ "kind": "centerline",
+ "image": {
+  "ascii": [
+   "............",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".#####...#..",
+   "............"
+  ]
+ },
+ "autotrace_output": "svg/autotrace_out.svg",
+ "thresholds": {
+  "use_corner": false,
+  "use_line": false
+ }
+}

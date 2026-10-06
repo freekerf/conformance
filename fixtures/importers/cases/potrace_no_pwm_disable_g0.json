@@ -1,0 +1,30 @@
+{
+ "description": "Support Hardware PWM off (lOn/lOff around each path) and Disable G0 fast skip",
+ "kind": "potrace",
+ "image": {
+  "ascii": [
+   "................",
+   ".####...........",
+   ".####...######..",
+   ".####...######..",
+   "........######..",
+   "........######..",
+   "........######..",
+   "..###...######..",
+   "..###...######..",
+   "..###...........",
+   "..###...........",
+   "..###...........",
+   "...........#....",
+   "................"
+  ]
+ },
+ "conf": {
+  "dir": "None",
+  "lOn": "M4"
+ },
+ "settings": {
+  "Support Hardware PWM": false,
+  "Disable G0 fast skip": true
+ }
+}

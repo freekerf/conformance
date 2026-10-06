@@ -1,0 +1,22 @@
+{
+ "description": "quality 0 gives a resolution of 0: GenerationComplete reports 'Target size too big for processing!' and the file is not touched",
+ "kind": "image_processor",
+ "image": {
+  "pixels": [
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0"
+  ]
+ },
+ "options": {
+  "Quality": 0
+ },
+ "target": {
+  "size": [
+   0.8,
+   0.4
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

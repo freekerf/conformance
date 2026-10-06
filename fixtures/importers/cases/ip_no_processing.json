@@ -1,0 +1,17 @@
+{
+ "description": "NoProcessing: original pixels, resolution from the file dpi (96 dpi -> 3.78 px/mm), always horizontal",
+ "kind": "image_processor",
+ "image": {
+  "pixels": [
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0"
+  ]
+ },
+ "options": {
+  "SelectedTool": "NoProcessing",
+  "LineDirection": "Vertical"
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

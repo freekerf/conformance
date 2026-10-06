@@ -1,0 +1,42 @@
+{
+ "description": "color image (not gray scale: the formula applies) with custom RGB weights, brightness 120, contrast 150, white clip 20, threshold 40 on, vertical lines, offset and speeds",
+ "kind": "image_processor",
+ "image": {
+  "pixels": [
+   "FF0000 FF0000 00FF00 00FF00 0000FF 0000FF",
+   "FF0000 FF0000 00FF00 00FF00 0000FF 0000FF",
+   "FFFF00 FFFF00 00FFFF 00FFFF FF00FF FF00FF",
+   "FFFF00 FFFF00 00FFFF 00FFFF FF00FF FF00FF",
+   "808080 404040 C0C0C0 FFFFFF 000000 202020",
+   "808080 404040 C0C0C0 FFFFFF 000000 202020"
+  ]
+ },
+ "options": {
+  "Formula": "Custom",
+  "Red": 150,
+  "Green": 60,
+  "Blue": 40,
+  "Brightness": 120,
+  "Contrast": 150,
+  "WhiteClip": 20,
+  "UseThreshold": true,
+  "Threshold": 40,
+  "LineDirection": "Vertical",
+  "Quality": 10
+ },
+ "target": {
+  "size": [
+   0.6,
+   0.6
+  ],
+  "offset": [
+   5,
+   7
+  ],
+  "mark_speed": 2500,
+  "min_power": 100,
+  "max_power": 800,
+  "laser_on": "M4"
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

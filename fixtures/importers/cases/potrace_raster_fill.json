@@ -1,0 +1,29 @@
+{
+ "description": "vectorize with raster filling (Horizontal): borders drawn with GDI+, resampled and engraved by Line2Line",
+ "kind": "potrace",
+ "image": {
+  "ascii": [
+   "................",
+   "................",
+   "..############..",
+   "..############..",
+   "..############..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..############..",
+   "..############..",
+   "..############..",
+   "................",
+   "................"
+  ]
+ },
+ "conf": {
+  "dir": "Horizontal",
+  "fres": 5.0
+ },
+ "platform_dependent": "GDI+ path fill and bicubic resize (libgdiplus)"
+}

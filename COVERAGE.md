@@ -4,8 +4,8 @@ Command: `make coverage` (build → AltCover instrumentation → pytest on the
 instrumented exe → report filtered to [`scope.toml`](scope.toml)). HTML:
 `core-tests/coverage-report/index.html`.
 
-Last run: **752 tests passed** (564 core + 188 importers), 108 s of tests
-(115 s wall including build and instrumentation). Without coverage the suite takes
+Last run: **844 tests passed** (564 core + 280 importers), 112 s of tests
+(118 s wall including build and instrumentation). Without coverage the suite takes
 about 90 s; it was run 3 times in a row with no failures.
 
 ## Tool choice (spike)
@@ -88,13 +88,15 @@ needs the exact truth table.
 ## Importers (tier "importers", phase 2)
 
 Same command and target (100 % lines, branches as close as reasonable), reported
-separately. Scope: [SCOPE.md](SCOPE.md), "Tier importers". Tests: 97 golden cases
-(`tests/golden/test_importers.py`, plus a check for orphan goldens) + 90 white-box
+separately. Scope: [SCOPE.md](SCOPE.md), "Tier importers". Tests: 126 golden cases
+(`tests/golden/test_importers.py`, plus a check for orphan goldens) + 153 white-box
 tests (`tests/importers/`).
 
 | file | lines | branches | net lines | net branches |
 |------|-------|----------|-----------|--------------|
-| GrblFile.cs (importer ranges) | 539/551 | 243/252 | 100 % | 96.4 % |
+| GrblFile.cs (importer ranges, incl. Potrace 379-506 and Centerline 1421-1468) | 648/660 | 279/296 | 100 % | 94.3 % |
+| RasterConverter/ImageProcessor.cs (without the preview drawing) | 646/653 | 217/236 | 100 % | 91.9 % |
+| Autotrace/Autotrace.cs | 46/49 | 11/14 | 100 % | 78.6 % |
 | Hershey/Hershey.cs | 99/99 | 31/32 | 100 % | 96.9 % |
 | SvgConverter/GCodeFromSVG.cs | 985/1095 | 399/543 | 100 % | 82.8 % |
 | SvgConverter/gcodeRelated.cs | 183/381 | 70/162 | 100 % | 89.7 % |
@@ -107,32 +109,40 @@ tests (`tests/importers/`).
 | SvgConverter/ArcFitter.cs | 82/82 | 42/44 | 100 % | 95.5 % |
 | SvgConverter/BezierTools.cs | 39/39 | 16/16 | 100 % | 100 % |
 | RasterConverter/ImageTransform.cs | 314/335 | 105/124 | 100 % | 87.5 % |
-| **total importers** | **3177/3519 (90.3 %)** | **1345/1622 (82.9 %)** | **100 %** | **91.3 %** |
+| **total importers** | **3978/4330 (91.9 %)** | **1609/1916 (84.0 %)** | **100 %** | **91.1 %** |
 
 Helper tier additions (no target): PotraceClipper 97 %, Cyotek ErrorDiffusionDithering
-94 %, RandomDithering 92 %, ImageUtilities 80 % lines.
+94 %, RandomDithering 92 %, ImageUtilities 80 % lines; CsPotrace 77 %, CsPotraceExport
+84 %, CsPotraceExportGCODE 68 %, BezierToBiarc 58-100 % lines. CsPotrace is measured
+only: the `potrace_*` golden cases (12) pin what it produces through
+`LoadImagePotrace`; the unexecuted parts are mostly the SVG export (`getSVG`, unused
+by LaserGRBL), turn policies other than the default and the fallbacks of the biarc
+approximation.
 
-**Line target: reached. Branch target: not reached (91.3 % net).** Most of the gap
+**Line target: reached. Branch target: not reached (91.1 % net).** Most of the gap
 is code behind hard-coded options (below).
 
-### Excluded lines (all 342 unexecuted importer lines; details in `exclusions.toml`)
+### Excluded lines (all 352 unexecuted importer lines; details in `exclusions.toml`)
 
 | category | where | why it is not tested |
 |----------|-------|----------------------|
 | fixed-option | GCodeFromSVG 316, 367, 409-410, 600-604, 763-769, 917-1195 (`svgNodesOnly` branches), 1377-1381, 1409-1412, 1450-1460, 1484-1487; gcodeRelated 122, 328-331, 422-466, 556-563, 613-615, 626-728 | private options that are hard-coded and never changed (`svgComments`, `svgNodesOnly`, `gcodeReduce`, `svgConvertToMM = true`, `gcodeCompress = true`, `gcodeNoArcs = false`, drag compensation off; every caller passes `avoidG23 = false`): the code cannot run in LaserGRBL. It could be reached by flipping the fields through reflection, but that would characterize behaviour no user can get |
 | dead | GrblFile 311, 328, 836-838, 1297-1305; GCodeFromSVG 119-122, 451-453, 728, 807-832, 835-867, 1253-1255, 1303-1305, 1505; gcodeRelated 103-111, 126-161, 167-168, 303-306, 311-314, 509-512, 533-535, 569-587, 592-593; ImageTransform 359, 366, 373, 390-404, 443-448 | no caller (`map`, `DirectionChange`, `convertFromFile`, the color filter of `convertFromText`, `getIntGCode` & co., `splitLine`, overloads with Z or floats, `Format32bppArgbCopy`, `DirectBitmap.Dispose`) or impossible by construction (negative separator length, unknown basic shape, negative `CalculateVectorAngle`, result below 0 in `ColorSubstitution`) |
 | defensive | SvgFilling 62 | Clipper `Execute` failure, not produced by valid input |
+| dead (threads, wrapper) | ImageProcessor 871-873; Autotrace 65-67 | `AbortThread` called from the processing thread itself (only the UI thread calls it); `ToHexString` has no caller |
+| race | ImageProcessor 865-868 | `AbortThread` forcing `Thread.Abort` when the preview thread is still running 100 ms after the exit request |
 
 ### Remaining partial branches (net), by reason
 
 | reason | lines |
 |--------|-------|
 | hard-coded option (the condition line runs, its other outcome cannot) | GCodeFromSVG 270, 313, 364, 408, 412, 599, 632, 638, 657, 665, 676, 686, 762, 780, 912, 916, 927, 942, 951, 964, 982, 1000, 1011, 1015, 1029, 1039, 1043, 1065, 1084, 1088, 1106, 1122, 1126, 1151, 1165, 1169, 1192, 1206, 1399, 1408, 1449, 1461, 1483; gcodeRelated 119, 327, 522, 612 |
-| compiler-generated (`foreach` disposal, `using`, `switch` on strings) | GCodeFromSVG 139, 172, 406, 593, 743, 784; SvgColorLayer 135; VectorGCode 41; DxfReader 471-472; ImageTransform 55-56, 76, 100 |
-| operand that cannot take the other value | GrblFile 205 (a trimmed non-empty line is never an empty command), 310, 327, 1140 (ExtractSegment only sees H/V/D); Hershey 322 (the regex only matches X/Y); GCodeFromSVG 445, 466, 477, 492, 504 (`transform != null`), 528, 717, 805, 934-935 (firstX is never null while a subpath is open), 1252, 1477, 1504; gcodeRelated 508, 514, 532 (no caller passes Z or a rapid with feed); SvgFilling 61; ArcFitter 85, 106; ImageTransform 221 (never a null dithering), 345-351 (`< 255 + threshold` always true), 358, 365, 372, 489 |
+| compiler-generated (`foreach` disposal, `using`, `switch` on strings) | GrblFile 438-440 (`using` in the Potrace raster filling); ImageProcessor 129-130, 894, 916, 1077, 1121, 1147, 1149, 1159; Autotrace 85; GCodeFromSVG 139, 172, 406, 593, 743, 784; SvgColorLayer 135; VectorGCode 41; DxfReader 471-472; ImageTransform 55-56, 76, 100 |
+| race (thread state) | ImageProcessor 861, 864 (preview thread already stopped / abort from itself), 882 (`MustExit` null), 892 (exit requested during a demo preview) |
+| operand that cannot take the other value | GrblFile 205 (a trimmed non-empty line is never an empty command), 310, 327, 467 (`plist != null`, always true), 1140, 1455, 1458 (the SVG writer emits no blank or comment-only lines here); ImageProcessor 910 (no tool after NoProcessing), 1074; Autotrace 30 (`ReadToEnd` never returns null), 57 (the png is always written) (ExtractSegment only sees H/V/D); Hershey 322 (the regex only matches X/Y); GCodeFromSVG 445, 466, 477, 492, 504 (`transform != null`), 528, 717, 805, 934-935 (firstX is never null while a subpath is open), 1252, 1477, 1504; gcodeRelated 508, 514, 532 (no caller passes Z or a rapid with feed); SvgFilling 61; ArcFitter 85, 106; ImageTransform 221 (never a null dithering), 345-351 (`< 255 + threshold` always true), 358, 365, 372, 489 |
 | platform | GrblFile 202: the G-code text is split on `Environment.NewLine` characters; with CRLF text on Linux (`\n` only) a blank line leaves a lone `\r`, on Windows the split removes it. Not produced by the current writers |
-| behind UI | GrblFile 540, 586, 667, 789: `CheckInUse()` true shows a MessageBox |
-| reachable, low value | GCodeFromSVG 1248 (arc whose sweep is exactly 0); DxfReader 60, 669 (spline with mismatched X/Y counts), 745 (`den == 0` in de Boor); SvgFilling 162 (operand combinations of the endpoint lookup); ImageTransform 508-510 (flood-fill color comparison per channel) |
+| behind UI | GrblFile 381, 540, 586, 667, 789, 1423: `CheckInUse()` true shows a MessageBox |
+| reachable, low value | ImageProcessor 327, 329 (operands of the color similarity test); GCodeFromSVG 1248 (arc whose sweep is exactly 0); DxfReader 60, 669 (spline with mismatched X/Y counts), 745 (`den == 0` in de Boor); SvgFilling 162 (operand combinations of the endpoint lookup); ImageTransform 508-510 (flood-fill color comparison per channel) |
 
 ### How the hard parts were reached
 
@@ -144,4 +154,22 @@ is code behind hard-coded options (below).
 * Centerline: only the conversion half (`convertFromText` with the centerline
   options), the autotrace step needs a Windows executable.
 * `ParallelOptimizePaths` multi-task path: a list of 2050 paths (two blocks of 1025).
+* Potrace raster filling: it draws into its own `new Bitmap`, which has 0 dpi on
+  libgdiplus and made `ResizeImage` throw; the native shim gives every new bitmap
+  96 dpi as on Windows (`native/lgshim.c`).
+* Potrace arcs: Bezier pieces of 0.5 mm or less are exported as `G1`; the
+  `potrace_disk_smooth` case uses 1 px/mm so the biarc (`G2`/`G3`) export runs.
+* Image orientation: libgdiplus ignores pure flips on bitmaps drawn with a Graphics,
+  which is every bitmap the raster pipeline hands to `LoadImageL2L`/`LoadImagePotrace`;
+  the shim routes those flips through two working rotations (`native/lgshim.c`).
+  Without it the `ip_*` goldens would be upside down compared with Windows.
+* ImageProcessor: the generation (`DoTrueWork`) is called on the test thread for the
+  golden cases; the white-box tests also run the real preview / generation threads
+  (C# only) and wait on a C# probe of the static events (`ImageProcessorProbe`).
+* Centerline: `autotrace.exe` is replaced by a shell double. `GrblCore.ExePath`
+  needs a command line, which the pythonnet host does not have: the harness sets
+  argv[0] with `mono_runtime_set_main_args` for the duration of the test, pointing
+  at a temp folder that holds `Autotrace/autotrace.exe` (Mono turns the backslash of
+  `Autotrace\autotrace.exe` into `/`). The double records the command line and the
+  png, then prints a canned svg.
 

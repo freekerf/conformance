@@ -1,0 +1,33 @@
+{
+ "description": "vectorize: separate shapes ordered by nearest neighbour (optimize fast), spot removal 0 keeps the 1-pixel speck",
+ "kind": "potrace",
+ "image": {
+  "ascii": [
+   "................",
+   ".####...........",
+   ".####...######..",
+   ".####...######..",
+   "........######..",
+   "........######..",
+   "........######..",
+   "..###...######..",
+   "..###...######..",
+   "..###...........",
+   "..###...........",
+   "..###...........",
+   "...........#....",
+   "................"
+  ]
+ },
+ "conf": {
+  "dir": "None",
+  "res": 5.0,
+  "oX": 10.0,
+  "oY": 20.0,
+  "borderSpeed": 600
+ },
+ "potrace": {
+  "spot_removal": 0,
+  "optimize_fast": true
+ }
+}

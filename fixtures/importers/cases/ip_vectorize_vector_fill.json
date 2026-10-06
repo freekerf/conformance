@@ -1,0 +1,44 @@
+{
+ "description": "Vectorize at the fixed vector quality (10 px/mm) with NewHorizontal filling (filling quality 5), spot removal, smoothing, optimize and optimize fast",
+ "kind": "image_processor",
+ "image": {
+  "ascii": [
+   "................",
+   "................",
+   "..############..",
+   "..############..",
+   "..############..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..############..",
+   "..############..",
+   "..############..",
+   "................",
+   "................"
+  ]
+ },
+ "options": {
+  "SelectedTool": "Vectorize",
+  "FillingDirection": "NewHorizontal",
+  "FillingQuality": 5,
+  "UseSpotRemoval": true,
+  "SpotRemoval": 3,
+  "UseSmoothing": true,
+  "Smoothing": 1.0,
+  "UseOptimize": true,
+  "Optimize": 0.2,
+  "OptimizeFast": true
+ },
+ "target": {
+  "size": [
+   1.6,
+   1.6
+  ],
+  "border_speed": 600
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

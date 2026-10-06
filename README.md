@@ -72,9 +72,13 @@ binaries stay in `~/.cache/freekerf-conformance/` because they are large and dis
      `EntryPointNotFoundException` on Linux;
    * `MonoPosixHelper!set_signal` to the shim: Mono's `SerialPort` always sets
      DTR/RTS when opening, which fails with `ENOTTY` on a pseudo terminal; the
-     shim ignores that error, so the core's own `UsbSerial` can open a PTY.
+     shim ignores that error, so the core's own `UsbSerial` can open a PTY;
+   * `gdiplus!GdipCreateBitmapFromScan0` to the shim, which creates the bitmap with
+     the real libgdiplus and gives it 96 dpi (libgdiplus: 0 dpi, Windows: 96);
+   * `gdiplus!GdipImageRotateFlip` to the shim: libgdiplus ignores pure flips on a
+     bitmap that was drawn with a Graphics, the shim does them as two rotations.
 5. `tools/TestSupport.cs` -> `TestSupport.dll` next to the exe (in-memory
-   `IComWrapper`, event recorder, emulator probes; see "Threading rule").
+   `IComWrapper`, event recorder, emulator and image processor probes; see "Threading rule").
 
 ### White-box path (pythonnet)
 
@@ -116,8 +120,9 @@ docstring). Neither layer loads the CLR unless `LASERGRBL_HOST=csharp` (the defa
 ### Importer golden cases
 
 A case is a small JSON file: kind (`generator`, `hershey`, `svg`, `dxf`, `svg_text`,
-`raster`, `image_op`), its input (an svg/dxf under `fixtures/importers/inputs/`,
-pixel rows, or parameters), the options (layers, `L2LConf` fields) and optional
+`raster`, `potrace`, `centerline`, `image_processor`, `image_op`), its input (an svg/dxf under `fixtures/importers/inputs/`,
+pixel rows or ASCII art, or parameters), the options (layers, `L2LConf` fields,
+vectorize options) and optional
 LaserGRBL settings. The result is the G-code of the resulting `GrblFile` (or the
 pixels of an image operation) plus a summary (count, estimated time, ranges); a
 conversion that throws records `error` (the C# `GrblFile` swallows it). To add a
@@ -157,6 +162,14 @@ across processes. The report filters by file and line range, applies
   restores a snapshot of its fields taken at the first use (`reset_gcode_statics`).
 * A new in-memory `Bitmap` has 0 dpi on libgdiplus (96 on Windows) and
   `ImageTransform.ResizeImage` throws on it: `importers.make_bitmap` sets 96 dpi.
+* Centerline calls `autotrace.exe` (Windows). `importers.fake_autotrace` replaces it
+  with a shell double: it sets the runtime's argv[0] (`mono_runtime_set_main_args`;
+  `Application.ExecutablePath` throws without one) to a temp folder holding
+  `Autotrace/autotrace.exe` and resets it afterwards.
+* `Settings.GetObject<T>` returns a stored value only if its type is exactly `T`
+  (otherwise the default, silently): case settings are converted by
+  `importers.apply_settings` (ints to Int32, floats to Double, the few float
+  settings to Single).
 * Image operations drawn through GDI+ (grayscale, threshold, invert, resize) are
   libgdiplus results (`platform_dependent` in their case files); the libgdiplus
   "nearest neighbor" resize blends pixels.
@@ -167,7 +180,7 @@ across processes. The report filters by file and line range, applies
 pyproject.toml  uv.lock  Makefile
 scope.toml  exclusions.toml          coverage scope and justified exclusions
 scripts/   build_lasergrbl.sh  make_mono_config.py  instrument.sh  get_altcover.sh  coverage_report.py
-native/    lgshim.c                  kernel32 timer + set_signal shims
+native/    lgshim.c                  kernel32 timer, set_signal, Bitmap dpi and flip shims
 tools/     TestSupport.cs  FixSymbols.cs
 src/lasergrbl_harness/
            runtime.py bootstrap.py clr_util.py core_rig.py fake_grbl.py links.py host.py golden.py importers.py waiting.py

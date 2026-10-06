@@ -70,18 +70,24 @@ parameters) + options -> G-code. Characterized mostly with golden cases
 
 | File | What is in scope | Notes |
 |------|------------------|-------|
-| `LaserGRBL/GrblFile.cs` | 175-216 (`LoadImportedSVG`/`LoadImportedVector`), 218-365 (Line2Line color segments, filling predicates), 519-1320 (`L2LConf`, `LoadImageL2L`, cutting / power-speed / shake test generators, Line2Line segmentation and optimization, path ordering, pixel helpers) | the G-code part of the file stays in tier "core" |
+| `LaserGRBL/GrblFile.cs` | 175-216 (`LoadImportedSVG`/`LoadImportedVector`), 218-365 (Line2Line color segments, filling predicates), 379-506 (`LoadImagePotrace`: vectorize, with vector or raster filling), 519-1320 (`L2LConf`, `LoadImageL2L`, cutting / power-speed / shake test generators, Line2Line segmentation and optimization, path ordering, pixel helpers), 1421-1468 (`LoadImageCenterline`) | the G-code part of the file stays in tier "core" |
 | `LaserGRBL/Hershey/Hershey.cs` | whole file | vector font of the test generators; the golden cases pin the whole font table |
 | `LaserGRBL/SvgConverter/GCodeFromSVG.cs` | whole file | SVG parser and G-code writer (also the conversion half of Centerline) |
 | `LaserGRBL/SvgConverter/gcodeRelated.cs` | whole file | static G-code writer shared by SVG and DXF |
 | `LaserGRBL/SvgConverter/SvgColorLayer.cs`, `SvgFilling.cs`, `VectorImportSource.cs`, `VectorDrawing.cs`, `VectorGCode.cs` | whole files | color layers, hatch filling, the import sources used by the color layers dialog |
 | `LaserGRBL/SvgConverter/DxfReader.cs`, `ArcFitter.cs`, `BezierTools.cs` | whole files | DXF reader (lines, true arcs, blocks, splines -> arcs), curve helpers |
 | `LaserGRBL/RasterConverter/ImageTransform.cs` | whole file | grayscale, threshold, invert, dithering, whitenize, resize, flood fill / outline |
+| `LaserGRBL/RasterConverter/ImageProcessor.cs` | all but the preview drawing (945-991, 1129-1135, 1166-1346) | the raster dialog pipeline: image edits (crop, auto trim, rotate, flip, invert, fill, outline, revert), the bitmap produced per tool, resolution choice (quality, adaptive vector quality, file dpi), `L2LConf` mapping, preview / generation threads |
+| `LaserGRBL/Autotrace/Autotrace.cs` | whole file | wrapper around `autotrace.exe` (temp png, command line, stdout); the executable is a test double, see below |
 
 Helper tier additions (third-party code used by the importers, measured only):
 `RasterConverter/Dithering/ErrorDiffusionDithering.cs`, `RandomDithering.cs`,
-`ImageUtilities.cs` (Cyotek, MIT) and `CsPotrace/PotraceClipper.cs` (Clipper-based
-hatch filling).
+`ImageUtilities.cs` (Cyotek, MIT), `CsPotrace/PotraceClipper.cs` (Clipper-based
+hatch filling), `CsPotrace/CsPotrace.cs`, `CsPotraceExport.cs`,
+`CsPotraceExportGCODE.cs` and `CsPotrace/BezierToBiarc/*` (potrace port and the
+Bezier -> G2/G3 biarc export). CsPotrace is not chased line by line: its safety net
+are the `potrace_*` golden cases (traced borders, holes, spot removal, smoothing
+with arcs, corners, vector and raster filling, PWM on/off).
 
 What a golden case covers and what it does not:
 
@@ -92,21 +98,42 @@ What a golden case covers and what it does not:
   marked `platform_dependent`: they were recorded with Mono's libgdiplus and are
   expected to differ by rounding (resize: by algorithm) on Windows GDI+.
 * A new in-memory `Bitmap` has 96 dpi on Windows and 0 dpi on libgdiplus, where
-  `ImageTransform.ResizeImage` throws; the harness creates its bitmaps with 96 dpi.
+  `ImageTransform.ResizeImage` throws; the native shim gives every new bitmap 96 dpi.
+* libgdiplus ignores pure flips (`RotateNoneFlipX/Y`) on bitmaps that were drawn with
+  a Graphics; the shim performs them as rotation+flip pairs, as Windows does them.
+* Vectorize with raster filling draws the traced shapes through GDI+ (antialiased
+  fill + bicubic resize) before Line2Line: `potrace_raster_fill*` are
+  `platform_dependent`. Borders and vector filling are pure numbers.
+* `image_processor` cases run the whole dialog pipeline, which always resizes and
+  converts to gray through GDI+: they are `platform_dependent`. What is portable is
+  the composition, pinned by `test_imp_processor.py` (the bitmap per tool equals a
+  documented chain of `ImageTransform` calls with the dialog values mapped as
+  `Red/100`, `-(100-Brightness)/100`, `Contrast/100`, `Threshold/100`, white clip).
+* Centerline runs the external `autotrace.exe` (Windows binary, not run here). A
+  shell double records the command line and the png LaserGRBL gives it and prints a
+  canned svg: `centerline_*` pin the command line (`-centerline`, `-corner-t`,
+  `-line-t <value/10>`), the input bitmap and the conversion of the svg with the
+  dialog settings. The autotrace algorithm itself is not characterized: a port
+  that keeps autotrace keeps its output; one that replaces it needs its own tests.
 * `SvgConverter.gcode` is a static class whose firmware type is read once by its
   static constructor: every case starts from a snapshot of a fresh process
   (`importers.reset_gcode_statics`, see FINDINGS F-38).
 
-## Still missing (next steps)
+## Not covered (decided)
 
-* `GrblFile.cs` 379-506 `LoadImagePotrace` (vectorization through CsPotrace; the
-  Line2Line raster filling inside it is already covered through `LoadImageL2L`).
-* `GrblFile.cs` 1421-1468 `LoadImageCenterline`: needs the Windows `autotrace.exe`;
-  only its conversion half (`GCodeFromSVG.convertFromText` with the centerline
-  options) is covered, as golden `svgtext_*`.
-* `RasterConverter/ImageProcessor.cs` (the pipeline behind the raster dialog: resize,
-  crop, rotation, thresholds, preview thread) and `GetVectorQuality`.
-* `GrblFile.cs` 1355-1420 / 1500-1683 preview drawing (GDI, UI) and
+* The autotrace algorithm (external executable, see above).
+* `ImageProcessor` preview drawing (line overlays, vector preview, centerline preview,
+  white point demo) and `GrblFile.cs` 1355-1420 / 1500-1683 preview drawing (GDI, UI) and
   `Generator/*` / `SvgConverter/*Form*` / `RasterConverter/*Form*` dialogs (UI; the
   values they pass are the golden parameters).
-* Raster/SVG/DXF entry points in `GrblCore.OpenFile` (open dialogs before importing).
+* Raster/SVG/DXF entry points in `GrblCore.OpenFile`: decided not to test (glue
+  that opens a dialog per file type). What they do, for the port:
+
+  | Extension (lower-cased, `GrblCore.cs:666-668`) | Goes to |
+  |-----------|---------|
+  | `.nc`, `.cnc`, `.tap`, `.gcode`, `.ngc` | `GrblFile.LoadFile` (G-code, tier core) |
+  | `.bmp`, `.png`, `.jpg`, `.jpeg`, `.gif` | raster dialog (`RasterToLaserForm` -> `ImageProcessor`) -> `LoadImageL2L` / `LoadImagePotrace` / `LoadImageCenterline` |
+  | `.svg` | `SvgToGCodeForm` -> `LoadImportedSVG` / `LoadImportedVector` (the "SVG as raster" branch, `GrblCore.cs:733-765`, is dead: the mode is hard-coded to Vector) |
+  | `.dxf` | `DxfReader.Read` -> `SvgToGCodeForm` with a `DxfImportSource` -> `LoadImportedVector`; `DxfImportException` and other errors are shown in a MessageBox |
+  | `.lps` (project) | for each stored image: write it to the temp dir, restore its saved settings, then `ReOpenFile` (first) / `OpenFile(append)` (others) |
+  | anything else | MessageBox "unsupported file type", nothing loaded |

@@ -6,6 +6,8 @@
   wins over per-assembly configs, so the entries go into that element of the
   *global* config.
 * MonoPosixHelper!set_signal, so Mono's SerialPort can open a PTY.
+* gdiplus!GdipCreateBitmapFromScan0, so a new Bitmap has 96 dpi as on Windows, and
+  gdiplus!GdipImageRotateFlip, so pure flips work on bitmaps drawn with a Graphics.
 
 Usage: make_mono_config.py <out-config> <path/to/liblgshim.so>
 """
@@ -35,4 +37,8 @@ for name in ("QueryPerformanceCounter", "QueryPerformanceFrequency", "GetTickCou
 posix = ET.Element("dllmap", {"dll": "MonoPosixHelper"})
 ET.SubElement(posix, "dllentry", {"dll": shim, "name": "set_signal", "target": "lg_set_signal"})
 root.insert(0, posix)
+gdip = ET.Element("dllmap", {"dll": "gdiplus"})
+for name in ("GdipCreateBitmapFromScan0", "GdipImageRotateFlip"):
+    ET.SubElement(gdip, "dllentry", {"dll": shim, "name": name, "target": "lg_" + name})
+root.insert(0, gdip)
 tree.write(out, encoding="unicode", xml_declaration=False)  # Mono's config parser rejects an XML declaration

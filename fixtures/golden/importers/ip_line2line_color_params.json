@@ -1,0 +1,33 @@
+{
+ "gcode": [
+  "G0 X5 Y7 F2500",
+  "M4 S0",
+  "G0 X5.4 Y7 S0",
+  "G1 Y7.2 S800",
+  "G0 X5.4 Y7.4 S0",
+  "G1 Y7.6 S800",
+  "S0",
+  "G0 X5.5 Y7.6 S0",
+  "G1 Y7.4 S800",
+  "G0 X5.5 Y7.2 S0",
+  "G1 Y7 S800",
+  "M5"
+ ],
+ "summary": {
+  "count": 12,
+  "estimated_time_s": 0.115,
+  "drawing_range": [
+   5.4,
+   7.0,
+   5.5,
+   7.6
+  ],
+  "moving_range": [
+   0.0,
+   0.0,
+   5.5,
+   7.6
+  ]
+ },
+ "generation_error": null
+}

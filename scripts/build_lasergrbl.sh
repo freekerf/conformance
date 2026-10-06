@@ -38,11 +38,11 @@ test -f "$EXE" || { echo "exe not found: $EXE" >&2; exit 1; }
 # native shims (kernel32 timers for Tools.HiResTimer; DTR/RTS on a PTY for Mono's
 # SerialPort), routed through a generated Mono global config ($WORK/mono-config)
 SHIM="$WORK/liblgshim.so"
-gcc -shared -fPIC -O2 -o "$SHIM" "$HERE/../native/lgshim.c"
+gcc -shared -fPIC -O2 -o "$SHIM" "$HERE/../native/lgshim.c" -ldl
 "$HERE/make_mono_config.py" "$WORK/mono-config" "$SHIM"
 
 # test-side C# helpers (in-memory transport, event recorder), next to the exe
-mcs -nologo -target:library -out:"$(dirname "$EXE")/TestSupport.dll" -r:"$EXE" -r:System.Windows.Forms.dll \
+mcs -nologo -target:library -out:"$(dirname "$EXE")/TestSupport.dll" -r:"$EXE" -r:System.Drawing.dll -r:System.Windows.Forms.dll \
 	"$HERE/../tools/TestSupport.cs"
 
 echo "$EXE"

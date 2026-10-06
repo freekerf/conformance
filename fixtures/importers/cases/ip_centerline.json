@@ -1,0 +1,34 @@
+{
+ "description": "raster dialog with the Centerline tool: always 10 px/mm, double threshold before autotrace (replayed svg); power, speed and offset reach the SVG writer through the stored dialog settings",
+ "kind": "image_processor",
+ "image": {
+  "ascii": [
+   "............",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".#####...#..",
+   "............"
+  ]
+ },
+ "autotrace_output": "svg/autotrace_out.svg",
+ "options": {
+  "SelectedTool": "Centerline",
+  "Quality": 3
+ },
+ "target": {
+  "size": [
+   2.4,
+   1.6
+  ],
+  "max_power": 700,
+  "border_speed": 1500,
+  "offset": [
+   3,
+   4
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

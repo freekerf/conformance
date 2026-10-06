@@ -144,3 +144,13 @@ def test_direct_bitmap_get_set_pixel():
     c = db.GetPixel(1, 0)
     assert (c.A, c.R, c.G, c.B) == (255, 1, 2, 3)
     assert (db.Width, db.Height) == (2, 1)
+
+
+def test_l2l_flips_bitmaps_drawn_with_graphics_too():
+    """The bitmaps the raster pipeline hands to LoadImageL2L come out of
+    ImageTransform (drawn with a Graphics). libgdiplus ignores pure flips on those;
+    the harness shim (native/lgshim.c) makes them flip as on Windows."""
+    src = im.make_bitmap({"pixels": ["00 00", "FF FF"]})
+    bmp = ImageTransform.Threshold(src, 0.5, True)
+    GrblFile().LoadImageL2L(bmp, "x", conf(), False, None)
+    assert im.dump_bitmap(bmp) == ["FFFFFFFF FFFFFFFF", "FF000000 FF000000"]

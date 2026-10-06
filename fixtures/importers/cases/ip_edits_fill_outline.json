@@ -1,0 +1,60 @@
+{
+ "description": "flood fill (black, tolerance 10) of the ring hole from a preview click, then outline from another click",
+ "kind": "image_processor",
+ "image": {
+  "ascii": [
+   "................",
+   "................",
+   "..############..",
+   "..############..",
+   "..############..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..############..",
+   "..############..",
+   "..############..",
+   "................",
+   "................"
+  ]
+ },
+ "edits": [
+  {
+   "op": "fill",
+   "at": [
+    50,
+    50
+   ],
+   "rsize": [
+    100,
+    100
+   ],
+   "color": "000000",
+   "tolerance": 10
+  },
+  {
+   "op": "outline",
+   "at": [
+    5,
+    5
+   ],
+   "rsize": [
+    100,
+    100
+   ]
+  }
+ ],
+ "options": {
+  "Quality": 10
+ },
+ "target": {
+  "size": [
+   1.6,
+   1.6
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

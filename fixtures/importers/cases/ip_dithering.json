@@ -1,0 +1,25 @@
+{
+ "description": "Dithering tool (Atkinson) at 10 lines/mm, diagonal",
+ "kind": "image_processor",
+ "image": {
+  "pixels": [
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0",
+   "00 20 40 60 80 A0 C0 E0"
+  ]
+ },
+ "options": {
+  "SelectedTool": "Dithering",
+  "DitheringMode": "Atkinson",
+  "LineDirection": "Diagonal",
+  "Quality": 10
+ },
+ "target": {
+  "size": [
+   0.8,
+   0.4
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

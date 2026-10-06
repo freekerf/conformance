@@ -1,0 +1,39 @@
+{
+ "description": "Vectorize with adaptive quality (255/sqrt(sqrt(area)) = 201.6 px/mm for 1.6 x 1.6 mm) and down sampling 2 before tracing, Horizontal raster filling at 4 lines/mm",
+ "kind": "image_processor",
+ "image": {
+  "ascii": [
+   "................",
+   "................",
+   "..############..",
+   "..############..",
+   "..############..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..###......###..",
+   "..############..",
+   "..############..",
+   "..############..",
+   "................",
+   "................"
+  ]
+ },
+ "options": {
+  "SelectedTool": "Vectorize",
+  "UseAdaptiveQuality": true,
+  "UseDownSampling": true,
+  "DownSampling": 2,
+  "FillingDirection": "Horizontal",
+  "FillingQuality": 4
+ },
+ "target": {
+  "size": [
+   1.6,
+   1.6
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

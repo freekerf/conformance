@@ -1,0 +1,32 @@
+{
+ "description": "Centerline takes speed, power, laser commands, offset and Bezier mode from the raster dialog settings, not from L2LConf",
+ "kind": "centerline",
+ "image": {
+  "ascii": [
+   "............",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".#####...#..",
+   "............"
+  ]
+ },
+ "autotrace_output": "svg/autotrace_out.svg",
+ "conf": {
+  "borderSpeed": 123,
+  "oX": 50.0,
+  "oY": 60.0,
+  "maxPower": 300,
+  "lOn": "M3"
+ },
+ "settings": {
+  "GrayScaleConversion.VectorizeOptions.BorderSpeed": 2500,
+  "GrayScaleConversion.Gcode.Offset.X": 5.5,
+  "GrayScaleConversion.Gcode.Offset.Y": -2.0,
+  "Vector.UseSmartBezier": false,
+  "GrayScaleConversion.Gcode.LaserOptions.PowerMax": 800,
+  "GrayScaleConversion.Gcode.LaserOptions.LaserOn": "M4"
+ }
+}

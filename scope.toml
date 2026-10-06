@@ -44,8 +44,8 @@ path = "LaserGRBL/Settings.cs"
 tier = "core"
 
 # GrblFile: G-code load/save/analysis/range only. The importer parts are listed
-# again below with tier "importers"; Potrace (379-506), Centerline and the GDI
-# preview drawing are not in scope yet (see SCOPE.md).
+# again below with tier "importers"; the GDI preview drawing is not in scope
+# (UI, see SCOPE.md).
 [[file]]
 path = "LaserGRBL/GrblFile.cs"
 tier = "core"
@@ -75,16 +75,30 @@ ranges = [[14, 24]]
 
 # ------------------------------------------------------------------ importers
 # GrblFile: vector import (175-216), raster segments and filling predicates
-# (218-365), L2LConf + Line2Line raster + test-pattern generators + path
-# optimization + pixel helpers (519-1320)
+# (218-365), Potrace vectorize (379-506), L2LConf + Line2Line raster +
+# test-pattern generators + path optimization + pixel helpers (519-1320),
+# Centerline (1421-1468)
 [[file]]
 path = "LaserGRBL/GrblFile.cs"
 tier = "importers"
-ranges = [[175, 216], [218, 365], [519, 1320]]
+ranges = [[175, 216], [218, 365], [379, 506], [519, 1320], [1421, 1468]]
+
+# autotrace.exe wrapper (the executable is replaced by a test double)
+[[file]]
+path = "LaserGRBL/Autotrace/Autotrace.cs"
+tier = "importers"
 
 [[file]]
 path = "LaserGRBL/Hershey/Hershey.cs"
 tier = "importers"
+
+# raster dialog pipeline: everything except the preview drawing (PreviewCenterline,
+# PreviewDithering 945-991, ProduceWhitepointDemo 1129-1135, PreviewLineByLine /
+# PreviewNoProcessing / PreviewVector 1166-1346: UI rendering, see SCOPE.md)
+[[file]]
+path = "LaserGRBL/RasterConverter/ImageProcessor.cs"
+tier = "importers"
+ranges = [[1, 944], [992, 1128], [1136, 1165], [1347, 1371]]
 
 [[file]]
 path = "LaserGRBL/SvgConverter/GCodeFromSVG.cs"
@@ -163,3 +177,38 @@ tier = "helper"
 [[file]]
 path = "LaserGRBL/CsPotrace/PotraceClipper.cs"
 tier = "helper"
+
+# CsPotrace (port of potrace) and the Bezier -> biarc conversion used by its G-code
+# export: measured only, the vectorize golden cases are the safety net
+[[file]]
+path = "LaserGRBL/CsPotrace/CsPotrace.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/CsPotraceExport.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/CsPotraceExportGCODE.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/BezierToBiarc/Algorithm.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/BezierToBiarc/Arc.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/BezierToBiarc/BiArc.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/BezierToBiarc/CubicBezier.cs"
+tier = "helper"
+
+[[file]]
+path = "LaserGRBL/CsPotrace/BezierToBiarc/Line.cs"
+tier = "helper"
+

@@ -1,0 +1,21 @@
+{
+ "description": "corner threshold 100 and line threshold 25 (passed as -line-t 2.5)",
+ "kind": "centerline",
+ "image": {
+  "ascii": [
+   "............",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".......#.#..",
+   ".#####...#..",
+   "............"
+  ]
+ },
+ "autotrace_output": "svg/autotrace_out.svg",
+ "thresholds": {
+  "corner": 100,
+  "line": 25
+ }
+}

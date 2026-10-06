@@ -1,0 +1,28 @@
+{
+ "description": "NewVertical vector filling with Support Hardware PWM off: filling and borders switched with lOn/lOff per path",
+ "kind": "potrace",
+ "image": {
+  "ascii": [
+   "............",
+   "............",
+   "............",
+   "...######...",
+   "...######...",
+   "...######...",
+   "...######...",
+   "...######...",
+   "...######...",
+   "............",
+   "............",
+   "............"
+  ]
+ },
+ "conf": {
+  "dir": "NewVertical",
+  "fres": 4.0,
+  "lOn": "M4"
+ },
+ "settings": {
+  "Support Hardware PWM": false
+ }
+}

@@ -1,0 +1,22 @@
+{
+ "description": "orientation: the top-left quarter of the image is black; the G-code burns it at high Y (image row 0 = top of the work, machine Y grows upwards)",
+ "kind": "image_processor",
+ "image": {
+  "ascii": [
+   "##....",
+   "##....",
+   "......",
+   "......"
+  ]
+ },
+ "options": {
+  "Quality": 10
+ },
+ "target": {
+  "size": [
+   0.6,
+   0.4
+  ]
+ },
+ "platform_dependent": "GDI+ resize (HighQualityBicubic) and grayscale ColorMatrix (libgdiplus)"
+}

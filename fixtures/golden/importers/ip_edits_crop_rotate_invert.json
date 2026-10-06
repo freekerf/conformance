@@ -1,0 +1,34 @@
+{
+ "gcode": [
+  "G0 X0 Y0 F1000",
+  "M3 S0",
+  "G1 X0.4 S631",
+  "S0",
+  "G0 X0.4 Y0.1 S0",
+  "G1 X0 S505",
+  "S0",
+  "G0 X0 Y0.2 S0",
+  "G1 X0.4 S380",
+  "S0",
+  "G0 X0.4 Y0.3 S0",
+  "G1 X0 S254",
+  "M5"
+ ],
+ "summary": {
+  "count": 13,
+  "estimated_time_s": 0.099,
+  "drawing_range": [
+   0.0,
+   0.0,
+   0.4,
+   0.3
+  ],
+  "moving_range": [
+   0.0,
+   0.0,
+   0.4,
+   0.3
+  ]
+ },
+ "generation_error": null
+}

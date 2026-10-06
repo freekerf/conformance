@@ -553,3 +553,23 @@ file = "LaserGRBL/RasterConverter/ImageTransform.cs"
 lines = [443, 448]
 category = "dead"
 reason = "DirectBitmap.Dispose: no caller (Fill and Outliner never dispose it)"
+
+# --------------------------------------------------------- ImageProcessor.cs
+[[exclusion]]
+file = "LaserGRBL/RasterConverter/ImageProcessor.cs"
+lines = [865, 868]
+category = "race"
+reason = "AbortThread: the preview thread is still running 100 ms after MustExit is set, then Thread.Abort (needs a preview slower than the join timeout)"
+
+[[exclusion]]
+file = "LaserGRBL/RasterConverter/ImageProcessor.cs"
+lines = [871, 873]
+category = "dead"
+reason = "AbortThread called from the processing thread itself: AbortThread is only called on Current from the UI thread (Refresh, GenerateGCode, Dispose)"
+
+# --------------------------------------------------------------- Autotrace.cs
+[[exclusion]]
+file = "LaserGRBL/Autotrace/Autotrace.cs"
+lines = [65, 67]
+category = "dead"
+reason = "ToHexString: no caller"

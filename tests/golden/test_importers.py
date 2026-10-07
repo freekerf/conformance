@@ -10,17 +10,25 @@ from pathlib import Path
 
 import pytest
 
-from lasergrbl_harness.importers import load_cases, run_case
+from lasergrbl_harness.importers import load_cases, run_case, rust_kinds
 
 ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "fixtures" / "golden" / "importers"
 CASES = load_cases()
+RUST = os.environ.get("LASERGRBL_HOST", "csharp") == "rust"
 
 
-@pytest.mark.skipif(os.environ.get("LASERGRBL_HOST", "csharp") == "rust",
-                    reason="FreeKerf's importers come with its milestone M2")
-@pytest.mark.parametrize("name,case", CASES, ids=[n for n, _ in CASES])
+def _case(name, case):
+    """``"rust_divergence": "DIV-NNN"`` in a case marks an intentional FreeKerf
+    difference (see tests/conftest.py); the C# host runs the case unchanged."""
+    marks = [pytest.mark.rust_divergence(case["rust_divergence"])] if "rust_divergence" in case else []
+    return pytest.param(name, case, marks=marks, id=name)
+
+
+@pytest.mark.parametrize("name,case", [_case(n, c) for n, c in CASES])
 def test_importer_golden(name, case, request):
+    if RUST and case["kind"] not in rust_kinds():
+        pytest.skip(f"FreeKerf does not run '{case['kind']}' cases yet")
     got = run_case(case)
     target = GOLDEN / (name + ".json")
     if request.config.getoption("--update-golden"):

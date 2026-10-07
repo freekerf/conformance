@@ -1,0 +1,5 @@
+{
+ "description": "rect (plain, rx, ry, rx!=ry), circle, ellipse, line, polyline, polygon (incl. one without commas) (input without the shapes LaserGRBL reads wrongly, see DIV-034: both hosts agree)",
+ "kind": "svg",
+ "input": "svg/basic_shapes_portable.svg"
+}

@@ -6,6 +6,7 @@ after an intentional behaviour change, and review the diff. Case format:
 
 import json
 import os
+import re
 from pathlib import Path
 
 import pytest
@@ -16,6 +17,16 @@ ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "fixtures" / "golden" / "importers"
 CASES = load_cases()
 RUST = os.environ.get("LASERGRBL_HOST", "csharp") == "rust"
+
+
+def _comparable(case, key, value):
+    """FreeKerf has no intermediate converter text: the Rust host is compared on the
+    ``converter_output`` of ``svg_text`` cases without its ``(...)`` comments, which
+    LaserGRBL removes when it loads the lines (FreeKerf's DIV-106). Everything else is
+    compared as it is, and the C# host always is."""
+    if RUST and case["kind"] == "svg_text" and key == "converter_output":
+        return [re.sub(r"\([^)]*\)", "", line) for line in value]
+    return value
 
 
 def _case(name, case):
@@ -38,7 +49,7 @@ def test_importer_golden(name, case, request):
     assert target.exists(), f"missing {target.name}: run `make golden`"
     expected = json.loads(target.read_text())
     for key in expected:
-        assert got.get(key) == expected[key], f"{name}: '{key}' differs"
+        assert _comparable(case, key, got.get(key)) == _comparable(case, key, expected[key]), f"{name}: '{key}' differs"
     assert set(got) == set(expected)
 
 

@@ -60,6 +60,15 @@ case from a field `"rust_divergence": "DIV-NNN"` in its JSON. Never delete such 
 loosen its assertion. Importer cases of a kind FreeKerf does not run yet (`freekerf
 import-case --kinds` lists the ones it does) are skipped for the Rust host.
 
+When a marked importer case would otherwise check much more than the divergence (a
+whole drawing with one wrongly read shape), a `*_portable` twin runs the same options
+on an input without the shapes LaserGRBL reads wrongly, recorded with LaserGRBL as
+usual, so both hosts are still compared on everything else (`svg_basic_shapes_portable`,
+`svg_transforms_portable`...). One comparison rule is host-specific: `svg_text` cases
+check LaserGRBL's intermediate converter text, comments included; FreeKerf has no such
+text (its DIV-106), so for the Rust host they are compared without the `(...)`
+comments, which LaserGRBL removes itself when it loads the lines.
+
 ## Differential layer (both hosts on the same inputs)
 
 ```bash

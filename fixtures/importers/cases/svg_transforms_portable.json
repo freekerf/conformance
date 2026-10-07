@@ -1,0 +1,5 @@
+{
+ "description": "nested group transforms and element transforms (input without the shapes LaserGRBL reads wrongly, see DIV-036: both hosts agree)",
+ "kind": "svg",
+ "input": "svg/transforms_portable.svg"
+}

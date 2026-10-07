@@ -1,5 +1,6 @@
 {
  "description": "rect (plain, rx, ry, rx!=ry), circle, ellipse, line, polyline, polygon (incl. one without commas)",
+ "rust_divergence": "DIV-034",
  "kind": "svg",
  "input": "svg/basic_shapes.svg"
 }

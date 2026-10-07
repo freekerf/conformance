@@ -1,5 +1,6 @@
 {
  "description": "a <path> without d: NullReferenceException, the whole import is lost (FINDINGS)",
+ "rust_divergence": "DIV-032",
  "kind": "svg",
  "input": "svg/path_without_d.svg"
 }

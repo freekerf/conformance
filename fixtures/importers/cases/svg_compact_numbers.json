@@ -1,5 +1,6 @@
 {
  "description": "'-4.5.5' is read as one number: the l command gets an odd number of arguments, IndexOutOfRangeException, nothing imported (FINDINGS)",
+ "rust_divergence": "DIV-031",
  "kind": "svg",
  "input": "svg/compact_numbers.svg"
 }

@@ -56,6 +56,34 @@ same mark from a first line `; rust_divergence: DIV-NNN` in its `.nc` file. Neve
 such a test or loosen its assertion. The importer goldens are skipped for the Rust host until
 FreeKerf's importers exist (its milestone M2).
 
+## Differential layer (both hosts on the same inputs)
+
+```bash
+FREEKERF_BIN=/path/to/freekerf make test-diff        # needs Mono (LASERGRBL_REPO) too
+DIFF_GCODE_EXAMPLES=2000 DIFF_PROTOCOL_EXAMPLES=100 FREEKERF_BIN=... make test-diff
+```
+
+`tests/differential/` (opt-in, skipped unless `FREEKERF_DIFF=1`, which `make test-diff`
+sets) generates inputs with [hypothesis](https://hypothesis.readthedocs.io/) and runs
+both hosts on each one (`src/lasergrbl_harness/differential.py`):
+
+* **G-code analysis**: generated programs (G0-G3 with I/J and R, F, S, M3/M4/M5, G90/G91,
+  G20/G21, G92, comments, spacing, malformed lines, extreme and odd numbers, Unicode
+  letters, CRLF) through `golden.analyze_csharp` and `freekerf analyze --json`, compared
+  field by field with the golden rounding.
+* **Protocol**: generated scenarios (fake board options such as buffer size, `Bf:`
+  reports, `ok` first, error rules; host options; a list of operations: manual lines,
+  jog, jog to, overrides, custom code, settings writes, jobs with errors, passes, hold,
+  soft reset, abort, alarm, resume, safety door) played on each host against its own
+  fake Grbl. Per operation the lines the device received, its real-time bytes except
+  the `?` polls, the RX buffer fill when the board acknowledges nothing (exact) or the
+  bound of its peak otherwise, overflows, errors and the coarse host state must match.
+
+Differences explained by a FreeKerf divergence are removed by the explicit rules of
+`differential.RULES` and `differential.GCODE_RULES` (DIV id -> normalization or input
+filter); nothing else is normalized. A counterexample found there becomes a fixed golden
+case or protocol test.
+
 ## Commands
 
 ```bash
@@ -63,6 +91,7 @@ make test         # build (Mono, in ~/.cache) + run the whole suite
 make coverage     # build + instrument with AltCover + run + report (terminal + HTML)
 make golden       # rewrite fixtures/golden/*.json from current behaviour (review the diff!)
 make test-rust    # protocol + golden (G-code) layers against FreeKerf (see above)
+make test-diff    # differential layer: C# and FreeKerf on the same generated inputs
 make clean        # remove ~/.cache/freekerf-conformance/{build,coverage}
 ```
 

@@ -17,6 +17,11 @@ package = true
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[dependency-groups]
+dev = [
+    "hypothesis>=6.168.5",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/lasergrbl_harness"]
 

@@ -3,6 +3,7 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.hypothesis/
 coverage-report/
 
 # Mono crash dumps (written to the working directory when the runtime aborts)

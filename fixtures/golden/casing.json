@@ -1,0 +1,43 @@
+{
+ "input": "casing.nc",
+ "commands": [
+  "",
+  "",
+  "G\u01311 X1",
+  "G0 X\u00df2"
+ ],
+ "wire": [
+  "",
+  "",
+  "G\u01311X1",
+  "G0X\u00df2"
+ ],
+ "offsets_s": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "estimated_time_s": 0.0,
+ "drawing_range": null,
+ "moving_range": [
+  0.0,
+  0.0,
+  0.0,
+  0.0
+ ],
+ "spindle_range": {
+  "min": 0.0,
+  "max": 0.0,
+  "valid": false
+ },
+ "quadrant": "Unknown",
+ "stream": [
+  "G90",
+  "",
+  "",
+  "G1X1",
+  "G0X2",
+  "G0X0Y0Z0"
+ ]
+}

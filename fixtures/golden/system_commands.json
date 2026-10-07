@@ -1,0 +1,59 @@
+{
+ "input": "system_commands.nc",
+ "commands": [
+  "",
+  "$H",
+  "$X",
+  "$J=G91 X1 F100",
+  "$110=500",
+  "$STA/SSID=MY NET",
+  "$$",
+  "G0 X1"
+ ],
+ "wire": [
+  "",
+  "$H",
+  "$X",
+  "$J=G91 X1 F100",
+  "$110=500",
+  "$STA/SSID=MY NET",
+  "$$",
+  "G0X1"
+ ],
+ "offsets_s": [
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.0,
+  0.01
+ ],
+ "estimated_time_s": 0.01,
+ "drawing_range": null,
+ "moving_range": [
+  0.0,
+  0.0,
+  1.0,
+  0.0
+ ],
+ "spindle_range": {
+  "min": 0.0,
+  "max": 0.0,
+  "valid": false
+ },
+ "quadrant": "Unknown",
+ "stream": [
+  "G90",
+  "",
+  "$H",
+  "$X",
+  "$J=G91 X1 F100",
+  "$110=500",
+  "$STA/SSID=MY NET",
+  "$$",
+  "G0X1",
+  "G0X0Y0Z0"
+ ]
+}

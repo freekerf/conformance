@@ -7,7 +7,9 @@ host states). The current host is the C# GrblCore talking to a PTY through its o
 adapter with the same methods (e.g. driving the new binary over a CLI or IPC) for
 the whole ``tests/protocol`` suite to run against it.
 
-Select the adapter with ``LASERGRBL_HOST`` (default ``csharp``).
+Select the adapter with ``LASERGRBL_HOST`` (default ``csharp``): ``csharp`` is the
+LaserGRBL core in-process (Mono), ``rust`` is FreeKerf's ``freekerf host --stdio``
+(binary from ``FREEKERF_BIN``, default ``freekerf`` on the PATH).
 """
 
 from __future__ import annotations
@@ -218,8 +220,163 @@ class CSharpHost:
                 pass
 
 
+def freekerf_bin() -> str:
+    """Path of the FreeKerf binary (``FREEKERF_BIN``, default ``freekerf``)."""
+    return os.environ.get("FREEKERF_BIN", "freekerf")
+
+
+class RustHostError(RuntimeError):
+    """An action of the Rust host failed."""
+
+
+class RustHost:
+    """FreeKerf (Rust) as the host: ``freekerf host --stdio`` in a subprocess.
+
+    Every adapter call is one action of FreeKerf's registry, sent as a JSON line
+    (``{"id", "action", "params"}``) and answered with ``{"id", "ok", "result"|"error"}``
+    (protocol: ``doc/features/host-protocol.md`` in the freekerf repository). Settings
+    live in memory, so every host starts from the defaults.
+    """
+
+    OPTIONS = {
+        "streaming_mode": "machine.streaming_mode",
+        "reset_on_connect": "machine.reset_on_connect",
+        "query_machine_info": "machine.query_machine_info",
+        "continuous_jog": "machine.continuous_jog",
+    }
+
+    # LaserGRBL silently ignores these when the state does not allow them
+    # (feed hold while idle, unlock while running...): so does the adapter.
+    FIRE_AND_FORGET = {"machine.feed_hold", "machine.resume", "machine.unlock", "machine.home",
+                       "job.abort", "machine.jog"}
+
+    def __init__(self):
+        import subprocess
+        import threading
+
+        self._proc = subprocess.Popen(
+            [freekerf_bin(), "host", "--stdio"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            text=True,
+            bufsize=1,
+        )
+        self._lock = threading.Lock()
+        self._next = 0
+
+    def _call(self, action, params=None):
+        import json
+
+        with self._lock:
+            self._next += 1
+            req = {"id": self._next, "action": action, "params": params}
+            self._proc.stdin.write(json.dumps(req) + "\n")
+            self._proc.stdin.flush()
+            line = self._proc.stdout.readline()
+        if not line:
+            raise RustHostError(f"{action}: freekerf exited")
+        resp = json.loads(line)
+        if resp.get("ok"):
+            return resp.get("result")
+        err = resp.get("error") or {}
+        if err.get("kind") == "refused" and action in self.FIRE_AND_FORGET:
+            return None
+        raise RustHostError(f"{action}: {err.get('message', err)}")
+
+    def _state(self):
+        return self._call("state.get")
+
+    # connection
+    def connect(self, port, baud=115200):
+        self._call("machine.connect", {"port": port, "baud": baud})
+
+    def disconnect(self):
+        self._call("machine.disconnect")
+
+    def set_option(self, name, value):
+        self._call("settings.set", {"key": self.OPTIONS[name], "value": value})
+
+    # job
+    def load_gcode(self, path):
+        self._call("job.load", {"path": str(path)})
+
+    def run_job(self):
+        self._call("job.run")
+
+    def abort_job(self):
+        self._call("job.abort")
+
+    # immediate / manual
+    def send_command(self, line):
+        self._call("machine.send", {"line": line})
+
+    def feed_hold(self):
+        self._call("machine.feed_hold")
+
+    def resume(self):
+        self._call("machine.resume")
+
+    def soft_reset(self):
+        self._call("machine.stop")
+
+    def unlock(self):
+        self._call("machine.unlock")
+
+    def home(self):
+        self._call("machine.home")
+
+    def jog(self, direction, step, feed):
+        self._call("machine.jog", {"direction": direction, "step_mm": float(step), "feed_mm_min": float(feed)})
+
+    def set_override_targets(self, feed, rapid, spindle):
+        self._call("machine.overrides", {"feed": feed, "rapid": rapid, "power": spindle})
+
+    def write_settings(self, settings):
+        self._call("machine.write_settings", {"settings": {str(k): str(v) for k, v in settings.items()}})
+
+    # observation
+    @property
+    def status(self):
+        return self._state()["machine"]["status"]
+
+    @property
+    def connected(self):
+        return bool(self._state()["machine"]["connected"])
+
+    @property
+    def ready(self):
+        return bool(self._state()["machine"]["ready"])
+
+    @property
+    def job_running(self):
+        return bool(self._state()["machine"]["in_program"])
+
+    @property
+    def issues(self):
+        return list(self._state()["issues"])
+
+    @property
+    def firmware_version(self):
+        return self._state()["firmware_version"]
+
+    @property
+    def job_errors(self):
+        return int(self._state()["machine"]["job_errors"])
+
+    def close(self):
+        if self._proc.poll() is None:
+            try:
+                self._proc.stdin.close()
+                self._proc.wait(timeout=10)
+            except Exception:
+                self._proc.kill()
+                self._proc.wait()
+
+
 def make_host() -> HostAdapter:
     kind = os.environ.get("LASERGRBL_HOST", "csharp")
     if kind == "csharp":
         return CSharpHost()
-    raise RuntimeError(f"unknown LASERGRBL_HOST={kind!r} (only 'csharp' exists today)")
+    if kind == "rust":
+        return RustHost()
+    raise RuntimeError(f"unknown LASERGRBL_HOST={kind!r} (csharp or rust)")

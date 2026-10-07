@@ -38,12 +38,30 @@ export LASERGRBL_REPO=/path/to/LaserGRBL
 make setup        # uv sync: Python 3.12 venv with pytest, pythonnet, pyserial
 ```
 
+## Running against FreeKerf (Rust)
+
+The *protocol* and *golden (G-code)* layers also run against FreeKerf, through
+`freekerf host --stdio` (`RustHost`) and `freekerf analyze --json`:
+
+```bash
+cargo build -p freekerf-cli                          # in the freekerf repository
+FREEKERF_BIN=/path/to/freekerf/target/debug/freekerf make test-rust
+```
+
+`make test-rust` needs neither Mono nor `LASERGRBL_REPO`. A test where FreeKerf
+intentionally differs from LaserGRBL is marked `@pytest.mark.rust_divergence("DIV-NNN")`
+(the id of the entry in FreeKerf's `doc/divergences.md`): for the Rust host it is
+expected to fail (strict xfail), the C# host runs it unchanged. Never delete such a
+test or loosen its assertion. The importer goldens are skipped for the Rust host until
+FreeKerf's importers exist (its milestone M2).
+
 ## Commands
 
 ```bash
 make test         # build (Mono, in ~/.cache) + run the whole suite
 make coverage     # build + instrument with AltCover + run + report (terminal + HTML)
 make golden       # rewrite fixtures/golden/*.json from current behaviour (review the diff!)
+make test-rust    # protocol + golden (G-code) layers against FreeKerf (see above)
 make clean        # remove ~/.cache/freekerf-conformance/{build,coverage}
 ```
 
@@ -112,7 +130,8 @@ overrides, feed hold, soft reset. `PtyLink` puts it behind `/dev/pts/N`; the hos
 (`CSharpHost` today) opens that path like a real serial port.
 
 To run the protocol layer against another host, implement the `HostAdapter`
-protocol in `lasergrbl_harness/host.py` and select it with `LASERGRBL_HOST`; the
+protocol in `lasergrbl_harness/host.py` (`RustHost` is the FreeKerf one) and select
+it with `LASERGRBL_HOST`; the
 golden layer needs an analyzer in `lasergrbl_harness/golden.py` and an importer
 runner in `lasergrbl_harness/importers.py` (`run_case`, case format in its
 docstring). Neither layer loads the CLR unless `LASERGRBL_HOST=csharp` (the default).

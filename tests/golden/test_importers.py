@@ -5,6 +5,7 @@ after an intentional behaviour change, and review the diff. Case format:
 ``lasergrbl_harness/importers.py``."""
 
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -16,6 +17,8 @@ GOLDEN = ROOT / "fixtures" / "golden" / "importers"
 CASES = load_cases()
 
 
+@pytest.mark.skipif(os.environ.get("LASERGRBL_HOST", "csharp") == "rust",
+                    reason="FreeKerf's importers come with its milestone M2")
 @pytest.mark.parametrize("name,case", CASES, ids=[n for n, _ in CASES])
 def test_importer_golden(name, case, request):
     got = run_case(case)

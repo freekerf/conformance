@@ -8,7 +8,7 @@ export LASERGRBL_COV_DIR   := $(COV_DIR)
 PYTEST_ARGS ?=
 REPORT_DIR ?= coverage-report
 
-.PHONY: all setup build test test-rust coverage coverage-report golden clean
+.PHONY: all setup build test test-rust test-diff coverage coverage-report golden clean
 
 all: test
 
@@ -25,6 +25,11 @@ test: build
 # Needs neither Mono nor LASERGRBL_REPO.
 test-rust:
 	LASERGRBL_HOST=rust uv run pytest tests/protocol tests/golden/test_golden.py $(PYTEST_ARGS)
+
+# Differential: the C# host and FreeKerf on the same generated inputs (hypothesis).
+# Needs Mono (LASERGRBL_REPO) and FREEKERF_BIN. Sizes: DIFF_GCODE_EXAMPLES, DIFF_PROTOCOL_EXAMPLES.
+test-diff: build
+	FREEKERF_DIFF=1 uv run pytest tests/differential --hypothesis-show-statistics $(PYTEST_ARGS)
 
 # build -> instrument (AltCover) -> pytest on the instrumented exe -> report filtered to scope.toml
 coverage: build

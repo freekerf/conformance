@@ -13,6 +13,27 @@ def pytest_addoption(parser):
     parser.addoption("--update-golden", action="store_true", help="rewrite fixtures/golden/*.json from the current host behaviour")
 
 
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers",
+        "rust_divergence(id): FreeKerf (LASERGRBL_HOST=rust) intentionally differs here; "
+        "the id is an entry of doc/divergences.md in the freekerf repository",
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    """For the Rust host only, a test marked ``rust_divergence("DIV-NNN")`` is expected
+    to fail (strict: it must fail, so a fixed divergence is noticed). The C# host
+    runs it unchanged."""
+    if os.environ.get("LASERGRBL_HOST", "csharp") != "rust":
+        return
+    for item in items:
+        m = item.get_closest_marker("rust_divergence")
+        if m is not None:
+            div = m.args[0] if m.args else "unspecified"
+            item.add_marker(pytest.mark.xfail(reason=f"intentional FreeKerf divergence {div}", strict=True))
+
+
 def pytest_sessionfinish(session, exitstatus):
     session.config._lasergrbl_exitstatus = int(exitstatus)
 

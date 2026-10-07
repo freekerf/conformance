@@ -8,7 +8,7 @@ export LASERGRBL_COV_DIR   := $(COV_DIR)
 PYTEST_ARGS ?=
 REPORT_DIR ?= coverage-report
 
-.PHONY: all setup build test coverage coverage-report golden clean
+.PHONY: all setup build test test-rust coverage coverage-report golden clean
 
 all: test
 
@@ -20,6 +20,11 @@ build:
 
 test: build
 	uv run pytest $(PYTEST_ARGS)
+
+# FreeKerf (Rust): the portable layers against `freekerf` (FREEKERF_BIN, default on the PATH).
+# Needs neither Mono nor LASERGRBL_REPO.
+test-rust:
+	LASERGRBL_HOST=rust uv run pytest tests/protocol tests/golden/test_golden.py $(PYTEST_ARGS)
 
 # build -> instrument (AltCover) -> pytest on the instrumented exe -> report filtered to scope.toml
 coverage: build

@@ -70,8 +70,26 @@ def analyze_csharp(path: str) -> dict:
         rig.close()
 
 
+def analyze_rust(path: str) -> dict:
+    """FreeKerf: ``freekerf analyze --json`` with the same machine configuration."""
+    import json
+    import subprocess
+
+    from .host import freekerf_bin
+
+    out = subprocess.run(
+        [freekerf_bin(), "analyze", "--json", "--max-rate", CONFIG[110], path],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return json.loads(out.stdout)
+
+
 def analyze(path: str) -> dict:
     kind = os.environ.get("LASERGRBL_HOST", "csharp")
     if kind == "csharp":
         return analyze_csharp(path)
+    if kind == "rust":
+        return analyze_rust(path)
     raise RuntimeError(f"no golden analyzer for LASERGRBL_HOST={kind!r}")

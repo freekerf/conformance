@@ -69,6 +69,12 @@ check LaserGRBL's intermediate converter text, comments included; FreeKerf has n
 text (its DIV-106), so for the Rust host they are compared without the `(...)`
 comments, which LaserGRBL removes itself when it loads the lines.
 
+`platform_dependent` importer cases were drawn by libgdiplus. For the Rust host only,
+their bitmaps (`pixels`) are compared within the tolerance of FreeKerf's ADR 0008
+(`lasergrbl_harness/tolerance.py`: same size, every ARGB channel within 8 and a mean
+difference of at most 1.5 on 0..255); the C# host is compared exactly. A case still
+outside the tolerance is a divergence (`rust_divergence`), never a wider tolerance.
+
 ## Differential layer (both hosts on the same inputs)
 
 ```bash

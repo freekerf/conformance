@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 
 from lasergrbl_harness.importers import load_cases, run_case, rust_kinds
+from lasergrbl_harness.tolerance import pixels_within_tolerance
 
 ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "fixtures" / "golden" / "importers"
@@ -36,6 +37,15 @@ def _case(name, case):
     return pytest.param(name, case, marks=marks, id=name)
 
 
+def _matches(case, key, got, expected):
+    """Exact, except for the Rust host on ``platform_dependent`` bitmaps: those goldens
+    are libgdiplus drawings, compared within the tolerance of FreeKerf ADR 0008
+    (``lasergrbl_harness.tolerance``)."""
+    if RUST and "platform_dependent" in case and key == "pixels":
+        return pixels_within_tolerance(got, expected)
+    return _comparable(case, key, got) == _comparable(case, key, expected)
+
+
 @pytest.mark.parametrize("name,case", [_case(n, c) for n, c in CASES])
 def test_importer_golden(name, case, request):
     if RUST and case["kind"] not in rust_kinds():
@@ -49,7 +59,7 @@ def test_importer_golden(name, case, request):
     assert target.exists(), f"missing {target.name}: run `make golden`"
     expected = json.loads(target.read_text())
     for key in expected:
-        assert _comparable(case, key, got.get(key)) == _comparable(case, key, expected[key]), f"{name}: '{key}' differs"
+        assert _matches(case, key, got.get(key), expected[key]), f"{name}: '{key}' differs"
     assert set(got) == set(expected)
 
 

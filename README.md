@@ -42,8 +42,9 @@ make setup        # uv sync: Python 3.12 venv with pytest, pythonnet, pyserial
 
 ## Running against FreeKerf (Rust)
 
-The *protocol* and *golden (G-code)* layers also run against FreeKerf, through
-`freekerf host --stdio` (`RustHost`) and `freekerf analyze --json`:
+The *protocol*, *golden (G-code)* and *golden (importers)* layers also run against
+FreeKerf, through `freekerf host --stdio` (`RustHost`), `freekerf analyze --json` and
+`freekerf import-case`:
 
 ```bash
 cargo build -p freekerf-cli                          # in the freekerf repository
@@ -54,9 +55,10 @@ FREEKERF_BIN=/path/to/freekerf/target/debug/freekerf make test-rust
 intentionally differs from LaserGRBL is marked `@pytest.mark.rust_divergence("DIV-NNN")`
 (the id of the entry in FreeKerf's `doc/divergences.md`): for the Rust host it is
 expected to fail (strict xfail), the C# host runs it unchanged. A golden case gets the
-same mark from a first line `; rust_divergence: DIV-NNN` in its `.nc` file. Never delete
-such a test or loosen its assertion. The importer goldens are skipped for the Rust host until
-FreeKerf's importers exist (its milestone M2).
+same mark from a first line `; rust_divergence: DIV-NNN` in its `.nc` file, and an importer
+case from a field `"rust_divergence": "DIV-NNN"` in its JSON. Never delete such a test or
+loosen its assertion. Importer cases of a kind FreeKerf does not run yet (`freekerf
+import-case --kinds` lists the ones it does) are skipped for the Rust host.
 
 ## Differential layer (both hosts on the same inputs)
 
@@ -246,7 +248,7 @@ tests/     conftest.py  test_traceability.py
            golden/
            differential/   (opt-in: make test-diff)
 fixtures/  gcode/*.nc  golden/*.json
-           importers/cases/*.json  importers/inputs/{svg,dxf}/  golden/importers/*.json
+           importers/cases/*.json  importers/inputs/{svg,dxf,resources}/  golden/importers/*.json
 SCOPE.md  COVERAGE.md  FINDINGS.md
 doc/       traceability.md  large-files.md
 ```
@@ -254,3 +256,6 @@ doc/       traceability.md  large-files.md
 ## License
 
 GPL-3.0-or-later (see [LICENSE](LICENSE) and [NOTICE](NOTICE)).
+`fixtures/importers/inputs/resources/LaserGRBL.Generator.SVG.LaserGRBL-accuracy-test-file.svg`
+is LaserGRBL's accuracy test file (embedded in LaserGRBL.exe as that resource), copied from
+LaserGRBL (© Diego Settimi, GPL-3.0) so the Rust host can open it as a file.

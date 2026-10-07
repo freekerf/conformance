@@ -71,6 +71,12 @@ libgdiplus and may differ on Windows GDI+ or in another implementation. Output f
 Pixel images (``image``): ``{"pixels": ["RRGGBB RRGGBB ...", ...]}``, one string per
 row, tokens of 2 (gray), 6 (RGB) or 8 (ARGB) hex digits; or ``{"ascii": ["..##..",
 ...]}``, one character per pixel, ``#`` black and ``.`` white.
+
+FreeKerf (``LASERGRBL_HOST=rust``) runs a case with ``freekerf import-case`` (the case
+on stdin, ``--inputs`` this directory), which prints the same JSON. The svg embedded in
+LaserGRBL.exe that ``resource`` cases open is a file of ``inputs/resources/`` named by
+its resource name. A case may carry ``"rust_divergence": "DIV-NNN"`` when FreeKerf
+intentionally differs (strict xfail for the Rust host only, see ``tests/conftest.py``).
 """
 
 from __future__ import annotations
@@ -619,8 +625,40 @@ def image_op(op: str, bmp, args: dict):
     raise ValueError(f"unknown image op {op!r}")
 
 
+_RUST_KINDS: list[str] | None = None
+
+
+def rust_kinds() -> list[str]:
+    """Case kinds the FreeKerf build runs (``freekerf import-case --kinds``); none for a
+    build without that command (every importer case is then skipped)."""
+    global _RUST_KINDS
+    if _RUST_KINDS is None:
+        import subprocess
+
+        from .host import freekerf_bin
+
+        out = subprocess.run([freekerf_bin(), "import-case", "--kinds"], capture_output=True, text=True)
+        _RUST_KINDS = out.stdout.split() if out.returncode == 0 else []
+    return _RUST_KINDS
+
+
+def run_rust(case: dict) -> dict:
+    """FreeKerf: ``freekerf import-case - --inputs fixtures/importers/inputs``."""
+    import subprocess
+
+    from .host import freekerf_bin
+
+    out = subprocess.run([freekerf_bin(), "import-case", "-", "--inputs", str(INPUTS)], input=json.dumps(case),
+                         capture_output=True, text=True)
+    if out.returncode != 0:
+        raise RuntimeError(f"freekerf import-case failed: {out.stderr.strip()}")
+    return json.loads(out.stdout)
+
+
 def run_case(case: dict) -> dict:
     kind = os.environ.get("LASERGRBL_HOST", "csharp")
     if kind == "csharp":
         return run_csharp(case)
+    if kind == "rust":
+        return run_rust(case)
     raise RuntimeError(f"no importer adapter for LASERGRBL_HOST={kind!r}")

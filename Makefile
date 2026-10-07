@@ -24,7 +24,7 @@ test: build
 # FreeKerf (Rust): the portable layers against `freekerf` (FREEKERF_BIN, default on the PATH).
 # Needs neither Mono nor LASERGRBL_REPO.
 test-rust:
-	LASERGRBL_HOST=rust uv run pytest tests/protocol tests/golden/test_golden.py $(PYTEST_ARGS)
+	LASERGRBL_HOST=rust uv run pytest tests/protocol tests/golden/test_golden.py tests/test_traceability.py $(PYTEST_ARGS)
 
 # Differential: the C# host and FreeKerf on the same generated inputs (hypothesis).
 # Needs Mono (LASERGRBL_REPO) and FREEKERF_BIN. Sizes: DIFF_GCODE_EXAMPLES, DIFF_PROTOCOL_EXAMPLES.

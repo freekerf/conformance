@@ -26,7 +26,9 @@ Python tests that pin the behaviour of LaserGRBL's C# core and of its importers
 | golden (importers) | `tests/golden/test_importers.py` | `fixtures/importers/cases/*.json` (+ `inputs/`) -> `fixtures/golden/importers/*.json` | yes: write a Rust `run_case` returning the same JSON (cases marked `platform_dependent` depend on GDI+) |
 
 Results of the last run: [COVERAGE.md](COVERAGE.md). Suspicious behaviour found
-along the way: [FINDINGS.md](FINDINGS.md).
+along the way: [FINDINGS.md](FINDINGS.md). Which white-box behaviour is compared
+between LaserGRBL and FreeKerf, and by which test:
+[doc/traceability.md](doc/traceability.md) (checked by `tests/test_traceability.py`).
 
 ## Setup (once)
 
@@ -231,18 +233,22 @@ across processes. The report filters by file and line range, applies
 pyproject.toml  uv.lock  Makefile
 scope.toml  exclusions.toml          coverage scope and justified exclusions
 scripts/   build_lasergrbl.sh  make_mono_config.py  instrument.sh  get_altcover.sh  coverage_report.py
+           large_file.py
 native/    lgshim.c                  kernel32 timer, set_signal, Bitmap dpi and flip shims
 tools/     TestSupport.cs  FixSymbols.cs
 src/lasergrbl_harness/
-           runtime.py bootstrap.py clr_util.py core_rig.py fake_grbl.py links.py host.py golden.py importers.py waiting.py
-tests/     conftest.py
+           runtime.py bootstrap.py clr_util.py core_rig.py fake_grbl.py links.py host.py golden.py importers.py
+           waiting.py jobs.py differential.py
+tests/     conftest.py  test_traceability.py
            whitebox/  (+ subproc/ scripts run in fresh processes)
            importers/
            protocol/
            golden/
+           differential/   (opt-in: make test-diff)
 fixtures/  gcode/*.nc  golden/*.json
            importers/cases/*.json  importers/inputs/{svg,dxf}/  golden/importers/*.json
 SCOPE.md  COVERAGE.md  FINDINGS.md
+doc/       traceability.md  large-files.md
 ```
 
 ## License

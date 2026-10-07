@@ -13,5 +13,6 @@
   "height": 4,
   "interpolation": "NearestNeighbor"
  },
- "platform_dependent": "GDI+ interpolation: libgdiplus blends even with NearestNeighbor"
+ "platform_dependent": "GDI+ interpolation: libgdiplus blends even with NearestNeighbor",
+ "rust_divergence": "DIV-108"
 }

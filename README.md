@@ -60,6 +60,12 @@ case from a field `"rust_divergence": "DIV-NNN"` in its JSON. Never delete such 
 loosen its assertion. Importer cases of a kind FreeKerf does not run yet (`freekerf
 import-case --kinds` lists the ones it does) are skipped for the Rust host.
 
+`platform_dependent` importer cases were drawn by libgdiplus. For the Rust host only,
+their bitmaps (`pixels`) are compared within the tolerance of FreeKerf's ADR 0008
+(`lasergrbl_harness/tolerance.py`: same size, every ARGB channel within 8 and a mean
+difference of at most 1.5 on 0..255); the C# host is compared exactly. A case still
+outside the tolerance is a divergence (`rust_divergence`), never a wider tolerance.
+
 ## Differential layer (both hosts on the same inputs)
 
 ```bash

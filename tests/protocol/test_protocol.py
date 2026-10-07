@@ -8,47 +8,8 @@ import pytest
 
 from lasergrbl_harness.fake_grbl import FakeGrbl
 from lasergrbl_harness.host import wait
+from lasergrbl_harness.jobs import FOOTER, HEADER, job_lines, next_fits, settle, wire
 from lasergrbl_harness.waiting import stays_true
-
-HEADER = "G90"  # default header "G90 (use absolute coordinates)" with the comment stripped
-FOOTER = "G0X0Y0Z0"
-
-
-def job_lines(n, start=0):
-    return [f"G1 X{i % 50}.{i % 10} Y{(i * 7) % 40} F{1000 + i}" for i in range(start, start + n)]
-
-
-def wire(line):
-    return line.replace(" ", "")
-
-
-@pytest.fixture
-def classic(host, job):
-    """A board that does not advertise its buffer (no Bf: field, OPT says 127):
-    the host must stay within the classic 127 bytes."""
-    from lasergrbl_harness.links import PtyLink
-
-    dev = FakeGrbl(report_buffer=False, opt_line="[OPT:V,15,127]")
-    link = PtyLink(dev)
-    host.connect(link.path)
-    settle(host, dev)
-    dev.lines.clear()
-    dev.realtime.clear()
-    dev.max_rx_used = 0
-    yield dev
-    link.close()  # hang up first so the host's serial reader wakes up
-    host.close()
-
-
-def next_fits(device, expected, budget):
-    """True while the next expected line would still fit in ``budget`` bytes."""
-    i = len(device.lines)
-    return i < len(expected) and device.rx_used + len(expected[i]) + 1 <= budget
-
-
-def settle(host, device):
-    """Connected, connect-time queries answered, and the last status report is Idle."""
-    wait(lambda: "$I" in device.lines and device.pending_lines == 0 and host.ready and host.status == "Idle", 10)
 
 
 # ---------------------------------------------------------------- connection

@@ -51,8 +51,9 @@ FREEKERF_BIN=/path/to/freekerf/target/debug/freekerf make test-rust
 `make test-rust` needs neither Mono nor `LASERGRBL_REPO`. A test where FreeKerf
 intentionally differs from LaserGRBL is marked `@pytest.mark.rust_divergence("DIV-NNN")`
 (the id of the entry in FreeKerf's `doc/divergences.md`): for the Rust host it is
-expected to fail (strict xfail), the C# host runs it unchanged. Never delete such a
-test or loosen its assertion. The importer goldens are skipped for the Rust host until
+expected to fail (strict xfail), the C# host runs it unchanged. A golden case gets the
+same mark from a first line `; rust_divergence: DIV-NNN` in its `.nc` file. Never delete
+such a test or loosen its assertion. The importer goldens are skipped for the Rust host until
 FreeKerf's importers exist (its milestone M2).
 
 ## Commands
@@ -126,7 +127,9 @@ threads, with bounded waits on conditions).
 `FakeGrbl` (`fake_grbl.py`) is a transport-independent Grbl 1.1 model: real-time
 commands, RX buffer accounting (`rx_used`, `max_rx_used`, `overflows`), manual or
 automatic `ok`, error rules, alarms, `$$`/`$I`/`$X`/`$H`/`$C`/`$J=`/`$N=V`,
-overrides, feed hold, soft reset. `PtyLink` puts it behind `/dev/pts/N`; the host
+overrides, feed hold, door, soft reset; for harder cases a silent status (`mute_status`),
+lost or garbled `ok`s, `WPos` and Grbl 0.9 reports, extra report fields, and `M114` for
+Marlin hosts. `PtyLink` puts it behind `/dev/pts/N`; the host
 (`CSharpHost` today) opens that path like a real serial port.
 
 To run the protocol layer against another host, implement the `HostAdapter`

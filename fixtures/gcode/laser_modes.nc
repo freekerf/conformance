@@ -1,0 +1,13 @@
+; when the laser burns: M3 S0 and M4 rapids do not, M5 S100 does not
+G90
+M3 S0
+G1 X10 F600
+M3 S100
+G1 X20 Y5
+M4 S200
+G0 X30 Y30
+G1 X40 Y35
+M5 S100
+G1 X50 Y50
+S300
+G1 X60

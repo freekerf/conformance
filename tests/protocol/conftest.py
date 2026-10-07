@@ -11,6 +11,7 @@ import pytest
 
 from lasergrbl_harness.fake_grbl import FakeGrbl
 from lasergrbl_harness.host import make_host, wait
+from lasergrbl_harness.jobs import forget_traffic, settle
 from lasergrbl_harness.links import PtyLink, hang_up_all
 
 CSHARP = os.environ.get("LASERGRBL_HOST", "csharp") == "csharp"
@@ -71,3 +72,32 @@ def job(tmp_path):
         return str(p)
 
     return make
+
+
+@pytest.fixture
+def board(host):
+    """Factory: a FakeGrbl built with ``kwargs`` behind its own PTY, the host connected
+    to it and settled (connect-time queries answered, Idle). Returns the device."""
+    links = []
+
+    def make(settle_host=True, **kwargs):
+        dev = FakeGrbl(**kwargs)
+        link = PtyLink(dev)
+        links.append(link)
+        dev.link = link
+        host.connect(link.path)
+        if settle_host:
+            settle(host, dev)
+            forget_traffic(dev)
+        return dev
+
+    yield make
+    for link in links:
+        link.close()  # hang up first so the host's serial reader wakes up
+
+
+@pytest.fixture
+def classic(board):
+    """A board that does not advertise its buffer (no Bf: field, OPT says 127):
+    the host must stay within the classic 127 bytes."""
+    return board(report_buffer=False, opt_line="[OPT:V,15,127]")

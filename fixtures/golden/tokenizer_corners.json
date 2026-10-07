@@ -1,0 +1,75 @@
+{
+ "input": "tokenizer_corners.nc",
+ "commands": [
+  "",
+  "G1\tX1 F100",
+  "G1 X+5 Y5-",
+  "G0 X.5 Y5.",
+  " X3) Y4",
+  "G0 X1 ",
+  "N10 G1 X7",
+  "T1 M6",
+  "G1X2Y3Z4F500",
+  "G0 X1 ",
+  "G1 X1 Y",
+  "M3 S"
+ ],
+ "wire": [
+  "",
+  "G1\tX1F100",
+  "G1X+5Y5-",
+  "G0X.5Y5.",
+  "X3)Y4",
+  "G0X1",
+  "N10G1X7",
+  "T1M6",
+  "G1X2Y3Z4F500",
+  "G0X1",
+  "G1X1Y",
+  "M3S"
+ ],
+ "offsets_s": [
+  0.0,
+  0.6,
+  4.442,
+  4.552,
+  4.579,
+  4.599,
+  8.199,
+  8.199,
+  8.811,
+  8.821,
+  8.821,
+  8.821
+ ],
+ "estimated_time_s": 8.821,
+ "drawing_range": null,
+ "moving_range": [
+  0.0,
+  -5.0,
+  7.0,
+  5.0
+ ],
+ "spindle_range": {
+  "min": 0.0,
+  "max": 0.0,
+  "valid": false
+ },
+ "quadrant": "Unknown",
+ "stream": [
+  "G90",
+  "",
+  "G1\tX1F100",
+  "G1X+5Y5-",
+  "G0X.5Y5.",
+  "X3)Y4",
+  "G0X1",
+  "N10G1X7",
+  "T1M6",
+  "G1X2Y3Z4F500",
+  "G0X1",
+  "G1X1Y",
+  "M3S",
+  "G0X0Y0Z0"
+ ]
+}

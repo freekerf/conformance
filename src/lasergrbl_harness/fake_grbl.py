@@ -68,6 +68,10 @@ class FakeGrbl:
     ok_first: bool = False  # answer "ok" before the $$ / $I data lines (seen on some clones)
     data_delay: float = 0.0  # with ok_first: seconds between the "ok" and the data lines
     data_gap: float = 0.03  # with data_delay: seconds between consecutive data lines
+    ok_reply: str = "ok"  # the acknowledge text (a garbled "xokx" is seen on noisy lines)
+    report_wpos: bool = False  # status reports carry WPos instead of MPos (Grbl $10=0)
+    legacy_status: bool = False  # Grbl 0.9 status format: <Idle,MPos:x,y,z,WPos:x,y,z>
+    extra_status: list[str] = field(default_factory=list)  # appended fields, e.g. "Pin:XY"
 
     def __post_init__(self) -> None:
         self.output = lambda data: None
@@ -93,6 +97,8 @@ class FakeGrbl:
         self.spindle = 0.0
         self.ov = [100, 100, 100]  # feed, rapids, spindle
         self.resets = 0
+        self.mute_status = False  # True: '?' is recorded but never answered (a silent board)
+        self.drop_oks = 0  # the next N "ok" replies are lost on the line (noise)
 
     # ------------------------------------------------------------------ wiring
     def connected(self) -> None:
@@ -105,6 +111,12 @@ class FakeGrbl:
         return self.welcome if self.welcome is not None else f"Grbl {self.version} ['$' for help]"
 
     def _emit(self, text: str) -> None:
+        if text == "ok":
+            if self.drop_oks > 0:
+                self.drop_oks -= 1
+                self.responses.append("(lost ok)")
+                return
+            text = self.ok_reply
         self.responses.append(text)
         self.output((text + "\r\n").encode())
 
@@ -172,7 +184,8 @@ class FakeGrbl:
         self.realtime.append(b)
         self.events.append(Event("rt", b, self.rx_used))
         if b == RT_STATUS:
-            self._emit(self.status_report())
+            if not self.mute_status:
+                self._emit(self.status_report())
         elif b == RT_HOLD:
             if self.state in ("Run", "Idle", "Jog"):
                 self.hold = True
@@ -180,7 +193,7 @@ class FakeGrbl:
         elif b == RT_RESUME:
             if self.hold:
                 self.hold = False
-                self.state = "Run" if self._rxq else "Idle"
+                self.state = "Idle"  # reported as Run while lines are buffered (status_report)
                 self._pump()
         elif b == RT_RESET:
             self._reset()
@@ -239,9 +252,16 @@ class FakeGrbl:
         st = self.state
         if st == "Idle" and self._rxq:
             st = "Run"  # lines buffered but not executed yet (manual-ack mode)
-        if st == "Hold":
-            st = "Hold:0"
-        parts = [st, "MPos:" + ",".join(f"{v:.3f}" for v in self.mpos)]
+        if self.legacy_status:
+            wpos = [m - w for m, w in zip(self.mpos, self.wco)]
+            return (f"<{st},MPos:" + ",".join(f"{v:.3f}" for v in self.mpos)
+                    + ",WPos:" + ",".join(f"{v:.3f}" for v in wpos) + ">")
+        if st in ("Hold", "Door"):
+            st += ":0"
+        if self.report_wpos:
+            parts = [st, "WPos:" + ",".join(f"{m - w:.3f}" for m, w in zip(self.mpos, self.wco))]
+        else:
+            parts = [st, "MPos:" + ",".join(f"{v:.3f}" for v in self.mpos)]
         if self.report_buffer:
             free = self.rx_size - self.rx_used
             parts.append(f"Bf:{max(0, 15 - len(self._rxq))},{free}")
@@ -250,6 +270,7 @@ class FakeGrbl:
             parts.append("WCO:" + ",".join(f"{v:.3f}" for v in self.wco))
         if self.report_overrides:
             parts.append("Ov:" + ",".join(str(v) for v in self.ov))
+        parts.extend(self.extra_status)
         return "<" + "|".join(parts) + ">"
 
     # ------------------------------------------------------------------ execution
@@ -312,6 +333,9 @@ class FakeGrbl:
                 return ["error:3"]
             self.settings[key] = m.group(2).strip()
             return ["ok"]
+        if up == "M114":  # Marlin position query (the fake answers it for Marlin hosts)
+            x, y, z = self.mpos
+            return [f"X:{x:.2f} Y:{y:.2f} Z:{z:.2f} E:0.00 Count X:0 Y:0 Z:0", "ok"]
         if up.startswith("$J="):
             if self.alarm is not None:
                 return ["error:8"]
@@ -354,6 +378,13 @@ class FakeGrbl:
             self._rxq.clear()
             self.rx_used = 0
             self._emit(f"ALARM:{code}")
+            self.cv.notify_all()
+
+    def hold_now(self) -> None:
+        """The board enters a feed hold by itself (e.g. a hold input or a door switch)."""
+        with self.cv:
+            self.hold = True
+            self.state = "Hold"
             self.cv.notify_all()
 
     def stream_lines(self) -> list[str]:

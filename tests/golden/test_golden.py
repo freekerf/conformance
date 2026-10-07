@@ -3,6 +3,7 @@ fixtures/golden/<name>.json. Regenerate with ``make golden`` (pytest --update-go
 after an intentional behaviour change, and review the diff."""
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -14,7 +15,16 @@ INPUTS = sorted((ROOT / "fixtures" / "gcode").glob("*.nc"))
 GOLDEN = ROOT / "fixtures" / "golden"
 
 
-@pytest.mark.parametrize("src", INPUTS, ids=[p.stem for p in INPUTS])
+def _case(src):
+    """A first line ``; rust_divergence: DIV-NNN`` marks a case where FreeKerf
+    intentionally differs (see tests/conftest.py)."""
+    first = src.read_text(encoding="utf-8").splitlines()[0] if src.stat().st_size else ""
+    m = re.match(r";\s*rust_divergence:\s*(DIV-\d+)", first)
+    marks = [pytest.mark.rust_divergence(m.group(1))] if m else []
+    return pytest.param(src, marks=marks, id=src.stem)
+
+
+@pytest.mark.parametrize("src", [_case(p) for p in INPUTS])
 def test_golden(src, request):
     got = analyze(str(src))
     target = GOLDEN / (src.stem + ".json")

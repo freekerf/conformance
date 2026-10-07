@@ -95,6 +95,15 @@ def test_run_from_start_with_homing_pushes_dollar_h_first(r, gcode):
     assert r.queue_texts()[:2] == ["$H", "G90 (use absolute coordinates)"]
 
 
+def test_restart_from_the_start_after_an_interruption_skips_the_header(r, gcode):
+    # the resume dialog with position 0 calls RunProgramFromStart(homing) with
+    # first=false: the custom header is not queued (FINDINGS.md F-54); RunProgram
+    # (a job never started or already completed) queues it
+    load_file_sync(r.core.LoadedFile, gcode(["G0 X1"]))
+    cu.call(r.core, "RunProgramFromStart", True, False, False)
+    assert r.queue_texts() == ["$H", "G0 X1"]
+
+
 def test_job_end_notifies_telegram_when_over_threshold(r, gcode):
     Settings.SetObject("TelegramNotification.Threshold", System.Int32(0))
     load_file_sync(r.core.LoadedFile, gcode(["G0 X1"]))

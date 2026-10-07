@@ -1,5 +1,6 @@
 {
  "description": "Support Hardware PWM=false: M3/M5 laser switching, power set once per layer with S",
+ "rust_divergence": "DIV-034",
  "kind": "svg",
  "input": "svg/basic_shapes.svg",
  "settings": {

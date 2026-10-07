@@ -1,0 +1,8 @@
+{
+ "description": "Disable G0 fast skip: rapid moves are G1 (input without the shapes LaserGRBL reads wrongly, see DIV-034: both hosts agree)",
+ "kind": "svg",
+ "input": "svg/basic_shapes_portable.svg",
+ "settings": {
+  "Disable G0 fast skip": true
+ }
+}

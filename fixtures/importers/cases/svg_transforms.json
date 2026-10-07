@@ -1,5 +1,6 @@
 {
  "description": "nested group transforms and element transforms",
+ "rust_divergence": "DIV-036",
  "kind": "svg",
  "input": "svg/transforms.svg"
 }

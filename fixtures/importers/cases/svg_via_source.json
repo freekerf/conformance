@@ -1,5 +1,6 @@
 {
  "description": "LoadImportedVector with the already parsed source (the dialog path), border speed from settings",
+ "rust_divergence": "DIV-034",
  "kind": "svg",
  "input": "svg/basic_shapes.svg",
  "via_source": true,

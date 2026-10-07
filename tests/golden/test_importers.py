@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 from lasergrbl_harness.importers import load_cases, run_case, rust_kinds
-from lasergrbl_harness.tolerance import pixels_within_tolerance
+from lasergrbl_harness.tolerance import gcode_within_tolerance, pixels_within_tolerance, summary_within_tolerance
 
 ROOT = Path(__file__).resolve().parents[2]
 GOLDEN = ROOT / "fixtures" / "golden" / "importers"
@@ -37,12 +37,23 @@ def _case(name, case):
     return pytest.param(name, case, marks=marks, id=name)
 
 
+def _cell(case):
+    """Burn map cell of a case, mm: one dot of its finest resolution (dots/mm)."""
+    conf = case.get("conf", {})
+    return 1.0 / max(float(conf.get("res", 10.0)), float(conf.get("fres", 10.0)))
+
+
 def _matches(case, key, got, expected):
-    """Exact, except for the Rust host on ``platform_dependent`` bitmaps: those goldens
-    are libgdiplus drawings, compared within the tolerance of FreeKerf ADR 0008
-    (``lasergrbl_harness.tolerance``)."""
-    if RUST and "platform_dependent" in case and key == "pixels":
-        return pixels_within_tolerance(got, expected)
+    """Exact, except for the Rust host on ``platform_dependent`` cases: those goldens
+    are libgdiplus drawings (bitmaps, or G-code engraved from them), compared within
+    the tolerance of FreeKerf ADR 0008 (``lasergrbl_harness.tolerance``)."""
+    if RUST and "platform_dependent" in case:
+        if key == "pixels":
+            return pixels_within_tolerance(got, expected)
+        if key == "gcode":
+            return gcode_within_tolerance(got, expected, _cell(case))
+        if key == "summary":
+            return summary_within_tolerance(got, expected, _cell(case))
     return _comparable(case, key, got) == _comparable(case, key, expected)
 
 

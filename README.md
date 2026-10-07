@@ -70,9 +70,13 @@ text (its DIV-106), so for the Rust host they are compared without the `(...)`
 comments, which LaserGRBL removes itself when it loads the lines.
 
 `platform_dependent` importer cases were drawn by libgdiplus. For the Rust host only,
-their bitmaps (`pixels`) are compared within the tolerance of FreeKerf's ADR 0008
-(`lasergrbl_harness/tolerance.py`: same size, every ARGB channel within 8 and a mean
-difference of at most 1.5 on 0..255); the C# host is compared exactly. A case still
+they are compared within the tolerance of FreeKerf's ADR 0008
+(`lasergrbl_harness/tolerance.py`): bitmaps (`pixels`) of the same size with every
+ARGB channel within 8 and a mean difference of at most 1.5 on 0..255; G-code
+(`gcode`) with the same lines before the first and after the last move and *burn
+maps* (every cutting move drawn on a grid of the case's resolution, highest power per
+cell) within the same limits, a one-cell shift allowed for the maximum; `summary`
+ranges within one cell and estimated time within 5 %. The C# host is compared exactly. A case still
 outside the tolerance is a divergence (`rust_divergence`), never a wider tolerance.
 
 ## Differential layer (both hosts on the same inputs)

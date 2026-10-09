@@ -172,17 +172,36 @@ def test_garbled_ok_still_acknowledges_the_line(host, board, job):
     assert host.job_errors == 0
 
 
+def _broken_ok_acknowledges(host, device, line):
+    device.set_auto_ack(False)
+    host.send_command("$110=500")  # a settings write: nothing else is sent until it is answered
+    host.send_command("G0 X1")
+    wait(lambda: device.lines == ["$110=500"], 5)
+    device.push(line)
+    wait(lambda: device.lines == ["$110=500", "G0X1"], 5)
+    device.set_auto_ack(True)
+
+
+@pytest.mark.rust_divergence("DIV-051")
 def test_any_message_containing_ok_acknowledges_a_line(connected, device):
     # the "broken ok" rule is "contains ok" (case-insensitive), checked before the
     # alarm and IP rules: a message such as [MSG:Look up] acknowledges the oldest
     # pending line as if it were its "ok" (F-51)
-    device.set_auto_ack(False)
-    connected.send_command("$110=500")  # a settings write: nothing else is sent until it is answered
-    connected.send_command("G0 X1")
-    wait(lambda: device.lines == ["$110=500"], 5)
-    device.push("[MSG:Look up]")
-    wait(lambda: device.lines == ["$110=500", "G0X1"], 5)
-    device.set_auto_ack(True)
+    _broken_ok_acknowledges(connected, device, "[MSG:Look up]")
+
+
+@pytest.mark.rust_divergence("DIV-051")
+def test_a_startup_line_report_acknowledges_a_line(connected, device):
+    # Grbl reports an executed startup block ($N0=...) as ">G54G20:ok"; the ":ok" is
+    # there so that senders do not count it (Grbl v1.1 interface), but the broken-ok
+    # rule counts it (F-51)
+    _broken_ok_acknowledges(connected, device, ">G54G20:ok")
+
+
+def test_an_ok_merged_into_a_status_report_acknowledges_a_line(connected, device):
+    # electrical noise: the "ok" lands inside a status report and the line is not a
+    # status report any more (LaserGRBL discussion #1498, the reason for the rule)
+    _broken_ok_acknowledges(connected, device, "<Idle|MPos:0.000,0.000,0.000|FS:0,0ok")
 
 
 def test_lost_oks_are_recovered_when_the_board_reports_an_empty_buffer(connected, device, job):

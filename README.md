@@ -76,7 +76,10 @@ ARGB channel within 8 and a mean difference of at most 1.5 on 0..255; G-code
 (`gcode`) with the same lines before the first and after the last move and *burn
 maps* (every cutting move drawn on a grid of the case's resolution, highest power per
 cell) within the same limits, a one-cell shift allowed for the maximum; `summary`
-ranges within one cell and estimated time within 5 %. The C# host is compared exactly. A case still
+ranges within one cell and estimated time within 5 %. The C# host is compared exactly.
+When an `image_processor` generation fails, its `summary` describes the loaded file
+LaserGRBL left untouched (the core's default file); for the Rust host such cases are
+compared on `gcode` and `generation_error` only. A case still
 outside the tolerance is a divergence (`rust_divergence`), never a wider tolerance.
 
 ## Differential layer (both hosts on the same inputs)

@@ -43,6 +43,15 @@ def _cell(case):
     return 1.0 / max(float(conf.get("res", 10.0)), float(conf.get("fres", 10.0)))
 
 
+def _harness_state(case, key, expected):
+    """Fields that are harness state, not LaserGRBL output, for the Rust host: when
+    an ``image_processor`` generation fails, ``summary`` describes the loaded file
+    LaserGRBL left untouched (the core's default file, whose range is the table);
+    ``import-case`` has no loaded file. ``gcode`` and ``generation_error`` are still
+    compared."""
+    return RUST and case["kind"] == "image_processor" and key == "summary" and expected.get("generation_error")
+
+
 def _matches(case, key, got, expected):
     """Exact, except for the Rust host on ``platform_dependent`` cases: those goldens
     are libgdiplus drawings (bitmaps, or G-code engraved from them), compared within
@@ -70,6 +79,8 @@ def test_importer_golden(name, case, request):
     assert target.exists(), f"missing {target.name}: run `make golden`"
     expected = json.loads(target.read_text())
     for key in expected:
+        if _harness_state(case, key, expected):
+            continue
         assert _matches(case, key, got.get(key), expected[key]), f"{name}: '{key}' differs"
     assert set(got) == set(expected)
 
